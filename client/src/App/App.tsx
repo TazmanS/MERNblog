@@ -4,20 +4,26 @@ import {Route, Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import Navigation from '../Navigation/Navigation'
 import RnavBar from '../RnavBar/RnavBar'
-import LnavBar from '../LnavBar/LnavBar'
 import Content from '../Content/Content'
 import AddContent from '../AddContent/AddContent'
 import {getAllArticles} from '../actions/articleAction'
+import {userEntranceLocalStorage} from '../actions/userAction'
 import Registration from '../Registration/Registration'
 
 
 interface App {
-  getAllArticles(): void
+  getAllArticles(): void,
+  userEntranceLocalStorage(userId): void,
+  user: any
 }
 
-const App:React.FC<App> = ({ getAllArticles }) =>{
+const App:React.FC<App> = ({ getAllArticles, userEntranceLocalStorage, user }) =>{
 
   useEffect(() => {
+    let userId = localStorage.getItem("user")
+    if(userId){
+      userEntranceLocalStorage(userId)
+    }
     getAllArticles()
   }, [])
 
@@ -29,11 +35,8 @@ const App:React.FC<App> = ({ getAllArticles }) =>{
             <Navigation />
           </div>
         </div>
-        <div className="row">
-          <div className="col-3">
-            <LnavBar />
-          </div>
-          <div className="col-6 content">
+        <div className="row Content">
+          <div className="col-8 content">
             <Switch>
               <Route path="/" exact component={Content} />
               <Route path="/registration" exact component={Registration} /> 
@@ -49,10 +52,17 @@ const App:React.FC<App> = ({ getAllArticles }) =>{
   )
 }
 
-function mapDispatchToProps(dispatch){
+function mapStateToProps(state){
   return{
-      getAllArticles: () => dispatch( getAllArticles() )
+    user: state.user
   }
 }
 
-export default connect(null, mapDispatchToProps)(App)
+function mapDispatchToProps(dispatch){
+  return{
+      getAllArticles: () => dispatch( getAllArticles() ),
+      userEntranceLocalStorage: (userId) => dispatch( userEntranceLocalStorage(userId) )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

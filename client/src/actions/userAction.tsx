@@ -1,12 +1,15 @@
-import {ADD_NEW_USER_INFORMATION} from './actionTypes'
+import {ADD_NEW_USER_INFORMATION, 
+    USER_ENTRANCE, 
+    USER_ENTRANCE_FALSE, 
+    USER_EXIT} from './actionTypes'
 import axios from 'axios'
 
 
 export function addNewUser(newUserData) {
     return async dispatch => {
         try{
-
             axios.post('/api/user/add', newUserData).then( res => {
+                localStorage.setItem('user', res.data.id)
                 dispatch({
                     type: ADD_NEW_USER_INFORMATION,
                     mess: res.data.data,
@@ -14,10 +17,61 @@ export function addNewUser(newUserData) {
                     id: res.data.id
                 })
             })
-
-
         } catch(e){
             console.error("Ошибка создания пользователя", e)
+        }
+    }
+}
+
+export function userEntranceLocalStorage(userId){
+    return async dispatch => {
+        try{
+            axios.post('/api/user/entrancelocalstorage', userId).then( res => {
+                dispatch({
+                    type: USER_ENTRANCE,
+                    login: res.data[0].login,
+                    id: res.data[0]._id
+                })
+            })
+        } catch(e){
+            console.log("Ошибка входа", e)
+        }
+    }
+}   
+
+export function userEntrance(userData){
+    return async dispatch => {
+        try{
+            await axios.post('/api/user/entrance', userData).then(res => {
+                if(res.status === 200){
+                    localStorage.setItem("user", res.data[0]._id)
+                    dispatch({
+                        type: USER_ENTRANCE,
+                        login: res.data[0].login,
+                        id: res.data[0]._id
+                    })
+                } else{
+                    dispatch({
+                        type: USER_ENTRANCE_FALSE,
+                        mess: res.data
+                    })
+                }
+            })
+        } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function userExit(){
+    return async dispatch => {
+        try{
+            localStorage.removeItem("user")
+            dispatch({
+                type: USER_EXIT
+            })
+        } catch(e){
+            console.log(e)
         }
     }
 }

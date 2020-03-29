@@ -32,3 +32,8 @@ code {
 .active-border-red{
   box-shadow: red 0px 0px 10px 3px;
 }
+
+.Content{
+  display: flex;
+  justify-content: center;
+}
