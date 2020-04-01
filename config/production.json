@@ -1,6 +1,0 @@
-{
-    "port": 5000,
-    "jwtSecret": "blogMERN",
-    "mongoUri": "mongodb+srv://admin:Taz789852@cluster0-qhmka.mongodb.net/blogMERN?retryWrites=true&w=majority",
-    "baseUrl": "http://localhost:5000"
-  }
