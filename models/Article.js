@@ -10,10 +10,14 @@ const schema = new Schema({
         require: true
     },
     hashTag: {
-        type: String,
-        required: false
+        type: Array,
+        required: true
     },
     date: {
+        type: String,
+        required: true
+    },
+    author: {
         type: String,
         required: true
     }

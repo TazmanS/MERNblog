@@ -10,7 +10,8 @@ router.post('/add', async (req, res) => {
             title: req.body.title,
             text: req.body.text,
             hashTag: req.body.hashTag,
-            date: req.body.date
+            date: req.body.date,
+            author: req.body.author
         })
 
         await article.save()
