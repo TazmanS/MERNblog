@@ -2,11 +2,11 @@ import {combineReducers} from 'redux'
 
 
 import usersReducers from './usersReducers'
-import articleReducers from './articleReducers'
+import articlesReducers from './articlesReducers'
 
 const reducer = combineReducers({
     user: usersReducers,
-    article: articleReducers
+    articles: articlesReducers
 })
 
 export default reducer

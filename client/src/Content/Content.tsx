@@ -1,25 +1,43 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 
 interface Article {
-    article: [{
+    articles: [{
         title: String,
         text: String,
         hashTag: String,
         date: String,
-        _id: String
+        _id: String,
+        author: String
     }]
 }
 
-const Content:React.FC<Article> = ({ article }) => {
+const Content:React.FC<Article> = ({ articles }) => {
 
-    const body = article.map((one, index) => {
+    const body = articles.map((one, index) => {
+
+        let shortText = one.text.slice(0,100)
+
         return(
             <div key={index}>
-                <h1>{one.title}</h1>
-                <p>{one.text}</p>  
-                <p>{one.hashTag}</p>  
-                <p>{one.date}</p>
+                <div className="container">
+                <div className="posts-list">
+                    <article id={`post-${index}`} className="post">
+                        <div className="post-content">
+                        <h2 className="post-title">{one.title}</h2>
+                            <p>{shortText}</p>
+                            <div className="post-footer">
+                                <Link className="more-link" to={{
+                                    pathname: "/article",
+                                    article: one
+                                }}>Продолжить чтение</Link>
+                                Автор: {one.author} - {one.date}
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
             </div>
         )
     })
@@ -31,7 +49,7 @@ const Content:React.FC<Article> = ({ article }) => {
 
 function mapStateToProps(state){
     return{
-        article: state.article
+        articles: state.articles
     }
 }
 

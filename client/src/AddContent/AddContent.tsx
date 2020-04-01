@@ -1,26 +1,29 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
-import {addNewArticle} from '../actions/articleAction'
+import {addNewArticle, getAllArticles} from '../actions/articleAction'
 import verty from '../hooks/verty.hooks'
 import {withRouter} from 'react-router-dom'
 
 interface NewArticle {
     title: String,
     text: String,
-    hashTag: String
+    hashTag: Array<any>
 }
 
 interface AddArticle {
-    addNewArticle(newArticleData: NewArticle) : void,
-    history: [any]
+    addNewArticle(newArticleData: NewArticle) : any,
+    history: [any],
+    user: any,
+    getAllArticles(): void
 }
 
-const AddContent:React.FC<AddArticle> = ({addNewArticle, history}) =>{
+const AddContent:React.FC<AddArticle> = ({addNewArticle, history, user, getAllArticles}) =>{
     
     const [titleChange, setTitleChange] = useState<string>('')
     const [textChange, setTextChange] = useState<string>('')
     const [hashTagChange, setHashTagChange] = useState<string>('')
     const [vertyInfo, setVertyInfo] = useState<boolean>(true)
+    const [hashTagArray, setHashTagArray] = useState([])
 
     const titleChangeFunction = event =>{
         setTitleChange(event.target.value)
@@ -34,16 +37,35 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle, history}) =>{
         setHashTagChange(event.target.value)
     }
 
+    const hashTagArrayFunction = (event) => {
+        event.preventDefault()
+        if(verty(hashTagChange)){
+            let newArr:any = hashTagArray.concat()
+            newArr.push(hashTagChange)
+            setHashTagArray(newArr)  
+            setHashTagChange('')
+        }
+    }
+
+    const deleteHashTag = (index) => {
+        let newArr = hashTagArray.concat()
+        newArr =  newArr.filter((one, i) => i !== index)
+
+        setHashTagArray(newArr)
+    }
+
     const addNewArticleFunction = async () =>{
         try{
-            const vertyChek = verty(titleChange, textChange, hashTagChange)
-            if(vertyChek){
+            const vertyChek = verty(titleChange, textChange)
+            if(vertyChek && hashTagArray.length > 0){
                 let newArticleData = {
                     title: titleChange,
                     text: textChange,
-                    hashTag: hashTagChange
+                    hashTag: hashTagArray,
+                    author: user.login
                 }
-                addNewArticle(newArticleData)
+                await addNewArticle(newArticleData).then(() => getAllArticles())
+                
                 setTitleChange('')
                 setTextChange('')
                 setHashTagChange('')
@@ -54,11 +76,18 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle, history}) =>{
                 console.error("Введите коректные данные")
                 setVertyInfo(false)
             }
-
         }catch (e){
             console.log("Че-то пошло не так")
         }
     }
+
+    const hashTagBody = hashTagArray.map((one, index) => {
+        return(
+            <span key={index}
+                className="hashTagItem"
+            > #{one} <span className="delete" onClick={() => deleteHashTag(index)}>x</span></span>
+        )
+    })
 
 
     return(
@@ -89,16 +118,22 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle, history}) =>{
             </div>
             <div className="form-group">
                 <label htmlFor="hashtag">Хэдштег</label>
-                <input 
-                    type="text" 
-                    className={verty(hashTagChange) 
-                        ? "form-control active-border-green" 
-                        : "form-control active-border-red"} 
-                    id="hashtag" 
-                    placeholder="тортики, рецепты, наптики" 
-                    value={hashTagChange}
-                    onChange={(event) => hashTagFunction(event)}
-                />
+                <div className="hashtagInput">
+                    <input 
+                        type="text" 
+                        className='form-control'
+                        id="hashtag" 
+                        placeholder="тортики, рецепты, наптики" 
+                        value={hashTagChange}
+                        onChange={(event) => hashTagFunction(event)}
+                    />
+                    <button className="btn btn-dark"
+                        onClick={event => hashTagArrayFunction(event)}
+                    >Добавить</button>    
+                </div>
+                <p className="hashTagContainer">
+                    {hashTagBody}    
+                </p>
             </div>
             <button className="btn btn-primary" onClick={async (event) =>{
                 event?.preventDefault()
@@ -111,12 +146,19 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle, history}) =>{
     )
 }
 
+function mapStateToProps(state){
+    return{
+        user: state.user
+    }
+}
+
 function mapDispatchToProps(dispatch){
     return{
         addNewArticle: (newArticleData) => {
             return dispatch( addNewArticle(newArticleData) ) 
-        }
+        },
+        getAllArticles: () => dispatch( getAllArticles() )
     }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(AddContent))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddContent))

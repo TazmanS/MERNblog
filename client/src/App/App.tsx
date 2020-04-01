@@ -9,6 +9,7 @@ import AddContent from '../AddContent/AddContent'
 import {getAllArticles} from '../actions/articleAction'
 import {userEntranceLocalStorage} from '../actions/userAction'
 import Registration from '../Registration/Registration'
+import Article from '../Article/Article'
 
 
 interface App {
@@ -29,21 +30,20 @@ const App:React.FC<App> = ({ getAllArticles, userEntranceLocalStorage, user }) =
 
   return(
     <Router>
-      <div className="container">
-        <div className="row">
+      <div className="container App">
+        <div className="row Content">
           <div className="col-12">
             <Navigation />
           </div>
-        </div>
-        <div className="row Content">
           <div className="col-8 content">
             <Switch>
               <Route path="/" exact component={Content} />
               <Route path="/registration" exact component={Registration} /> 
               <Route path="/add" exact component={AddContent} /> 
+              <Route path="/article" exact component={Article} />
             </Switch>
           </div>
-          <div className="col-3">
+          <div className="col-3 RnavBar">
             <RnavBar />
           </div>
         </div>

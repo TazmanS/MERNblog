@@ -1,22 +1,19 @@
 import React from 'react'
 import Login from '../Login/Login'
 import {connect} from 'react-redux'
-import {userExit} from '../actions/userAction'
+import UserMenu from '../UserMenu/UserMenu'
 
 interface RnavBar {
-    user: any,
-    userExit(): void
+    user: any
 }
 
-const RnavBar:React.FC<RnavBar> = ({ user, userExit }) =>{
+const RnavBar:React.FC<RnavBar> = ({ user }) =>{
     return (
         <div>
-            <p>{user.login}</p>
-            <Login />
-            <button
-                className="btn btn-danger"
-                onClick={userExit}
-            >Exit</button>
+            {user.id
+                ? <UserMenu />
+                : <Login />
+            }
         </div>
     )
 }
@@ -27,10 +24,4 @@ function mapStateToProps(state){
     }
 }
 
-function mapDispatchToProps(dispatch){
-    return{
-        userExit: () => dispatch( userExit() )
-    }
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(RnavBar)
+export default connect(mapStateToProps)(RnavBar)

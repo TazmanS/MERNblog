@@ -4,12 +4,11 @@ import {getAllArticles} from '../actions/articleAction'
 import {connect} from 'react-redux'
 
 interface GetAll {
-    getAllArticles(): void
+    getAllArticles(): void,
+    user: any
 }
 
-const Navigation:React.FC<GetAll> = (props) => {
-
-    const {getAllArticles} = props
+const Navigation:React.FC<GetAll> = ({getAllArticles, user}) => {
 
     return(
         <nav className="navbar 
@@ -35,16 +34,22 @@ const Navigation:React.FC<GetAll> = (props) => {
                             onClick={getAllArticles}
                         >На главную <span className="sr-only">(current)</span></Link>
                     </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/registration">Регистрация</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/add">Добавить статью</Link>
-                    </li>
+                    {user.id
+                        ? null
+                        : <li className="nav-item">
+                            <Link className="nav-link" to="/registration">Регистрация</Link>
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>
     )
+}
+
+function mapStateToProps(state){
+    return{
+        user: state.user
+    }
 }
 
 function mapDispatchToProp(dispatch){
@@ -53,4 +58,4 @@ function mapDispatchToProp(dispatch){
     }
 }
 
-export default connect(null, mapDispatchToProp)(Navigation)
+export default connect(mapStateToProps, mapDispatchToProp)(Navigation)

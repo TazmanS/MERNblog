@@ -1,4 +1,4 @@
-import {GET_ALL_ARTICLE} from './actionTypes'
+import {GET_ALL_ARTICLES} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -8,7 +8,7 @@ export function getAllArticles(){
             await axios.get('/api/article/all')
                 .then((res) => {
                     dispatch({
-                        type: GET_ALL_ARTICLE,
+                        type: GET_ALL_ARTICLES,
                         payload: res.data
                     })
                 })
@@ -22,8 +22,6 @@ export function addNewArticle(newArticleData){
     return async dispatch => {
         try{
             const date = moment().format('MMMM Do YYYY')
-
-            console.log({...newArticleData, date})
 
             const data = {...newArticleData, date}
             
