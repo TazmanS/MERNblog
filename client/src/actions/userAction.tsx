@@ -26,7 +26,10 @@ export function addNewUser(newUserData) {
 export function userEntranceLocalStorage(userId){
     return async dispatch => {
         try{
-            axios.post('/api/user/entrancelocalstorage', userId).then( res => {
+            const data = {
+                userId: userId
+            }
+            axios.post('/api/user/entrancelocalstorage', data).then( res => {
                 dispatch({
                     type: USER_ENTRANCE,
                     login: res.data[0].login,

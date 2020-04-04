@@ -17,7 +17,7 @@ const Navigation:React.FC<GetAll> = ({getAllArticles, user}) => {
             text-white
             bg-primary
             justify-content-between">
-            <Link className="navbar-brand" to="/">Info Blog</Link>
+            <Link className="navbar-brand" to="/" onClick={getAllArticles}>Info Blog</Link>
             <button className="navbar-toggler" 
                 type="button" 
                 data-toggle="collapse" 

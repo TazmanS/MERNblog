@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
-import {addNewArticle, getAllArticles} from '../actions/articleAction'
+import {addNewArticle, getAllArticles, updateArticle} from '../actions/articleAction'
 import verty from '../hooks/verty.hooks'
 import {withRouter} from 'react-router-dom'
 
@@ -12,18 +12,32 @@ interface NewArticle {
 
 interface AddArticle {
     addNewArticle(newArticleData: NewArticle) : any,
-    history: [any],
+    history: any,
     user: any,
-    getAllArticles(): void
+    getAllArticles(): void,
+    updateArticle(newArticleData: NewArticle, articleId: String) : any
 }
 
-const AddContent:React.FC<AddArticle> = ({addNewArticle, history, user, getAllArticles}) =>{
+const AddContent:React.FC<AddArticle> = ({addNewArticle, 
+    history, 
+    user, 
+    getAllArticles, 
+    updateArticle}) =>{
     
     const [titleChange, setTitleChange] = useState<string>('')
     const [textChange, setTextChange] = useState<string>('')
     const [hashTagChange, setHashTagChange] = useState<string>('')
     const [vertyInfo, setVertyInfo] = useState<boolean>(true)
     const [hashTagArray, setHashTagArray] = useState([])
+
+    useEffect(() => {
+        if(history.location.article){
+            setTitleChange(history.location.article.title)
+            setTextChange(history.location.article.text)
+            setHashTagArray(history.location.article.hashTag)
+            setVertyInfo(true)
+        }
+    }, [])
 
     const titleChangeFunction = event =>{
         setTitleChange(event.target.value)
@@ -62,15 +76,20 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle, history, user, getAllAr
                     title: titleChange,
                     text: textChange,
                     hashTag: hashTagArray,
-                    author: user.login
+                    author: user.login,
+                    authorId: user.id
                 }
-                await addNewArticle(newArticleData).then(() => getAllArticles())
+                if(history.location.article){
+                    await updateArticle(newArticleData, history.location.article._id )
+                } else{
+                    await addNewArticle(newArticleData).then(() => getAllArticles())
+                }
                 
                 setTitleChange('')
                 setTextChange('')
                 setHashTagChange('')
                 setVertyInfo(true)
-                history.push('/')
+                history.push('/redactor')
                 
             } else{
                 console.error("Введите коректные данные")
@@ -138,7 +157,9 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle, history, user, getAllAr
             <button className="btn btn-primary" onClick={async (event) =>{
                 event?.preventDefault()
                 addNewArticleFunction()
-            }}>Добавить</button>
+            }}>{history.location.article
+                ? "Редактировать"
+                : "Добавить"}</button>
             <span>
                 {vertyInfo ? null : <small>Неверный ввод</small>}
             </span>
@@ -157,7 +178,8 @@ function mapDispatchToProps(dispatch){
         addNewArticle: (newArticleData) => {
             return dispatch( addNewArticle(newArticleData) ) 
         },
-        getAllArticles: () => dispatch( getAllArticles() )
+        getAllArticles: () => dispatch( getAllArticles() ),
+        updateArticle: (newArticleData, articleId) => dispatch( updateArticle(newArticleData, articleId) )
     }
 }
 

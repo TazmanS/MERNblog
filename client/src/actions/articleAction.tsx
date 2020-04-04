@@ -1,6 +1,7 @@
-import {GET_ALL_ARTICLES} from './actionTypes'
+import {GET_ALL_ARTICLES, DELETE_ARTICLE} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
+import {getAllAuthorArticles} from './articleAuthor'
 
 export function getAllArticles(){
     return async dispatch => {
@@ -28,6 +29,39 @@ export function addNewArticle(newArticleData){
             await axios.post('/api/article/add', data).then(() => {
                 console.log("Article add React")
             })
+        } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function deleteArticle(articleId){
+    return async dispatch => {
+        try{
+            const data = {
+                articleId: articleId
+            }
+            await axios.post('/api/article/delete', data).then(res =>{
+                
+            })
+        } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function updateArticle(newArticleData, articleId) {
+    return async dispatch => {
+        try{
+
+            const data = {
+                newArticleData: newArticleData,
+                articleId: articleId
+            }
+            await axios.post('/api/article/updatearticle', data).then((res) => {
+                console.log(res)
+            })
+
         } catch(e){
             console.log(e)
         }

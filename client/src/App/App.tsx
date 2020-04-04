@@ -10,6 +10,7 @@ import {getAllArticles} from '../actions/articleAction'
 import {userEntranceLocalStorage} from '../actions/userAction'
 import Registration from '../Registration/Registration'
 import Article from '../Article/Article'
+import RedactorArticle from '../RedactorArticle/RedactorArticle'
 
 
 interface App {
@@ -41,6 +42,7 @@ const App:React.FC<App> = ({ getAllArticles, userEntranceLocalStorage, user }) =
               <Route path="/registration" exact component={Registration} /> 
               <Route path="/add" exact component={AddContent} /> 
               <Route path="/article" exact component={Article} />
+              <Route path="/redactor" exact component={RedactorArticle} />
             </Switch>
           </div>
           <div className="col-3 RnavBar">
