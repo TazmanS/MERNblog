@@ -3,6 +3,8 @@ const Article = require('../models/Article')
 
 const router = Router()
 
+//api/article
+
 router.post('/add', async (req, res) => {
     try{
 
@@ -11,7 +13,8 @@ router.post('/add', async (req, res) => {
             text: req.body.text,
             hashTag: req.body.hashTag,
             date: req.body.date,
-            author: req.body.author
+            author: req.body.author,
+            authorId: req.body.authorId
         })
 
         await article.save()
@@ -34,6 +37,33 @@ router.get('/all', async (req,res) => {
         console.log(e)
     }
 
+})
+
+router.post('/delete', async (req, res) => {
+    try{
+        await Article.findOneAndDelete({ _id: req.body.articleId }).then(data => {
+            return res.status(200).json(data)
+        })
+    } catch(e){
+        console.log(e)
+    }
+})
+
+router.post('/updatearticle', async (req, res) => {
+    try{
+        const article = {
+            title: req.body.newArticleData.title,
+            text: req.body.newArticleData.text,
+            hashTag: req.body.newArticleData.hashTag
+        }
+
+        await Article.findByIdAndUpdate(req.body.articleId, article).then(one => {
+            return res.status(200).json(one)
+        })
+
+    } catch(e){
+        console.log(e)
+    }
 })
 
 

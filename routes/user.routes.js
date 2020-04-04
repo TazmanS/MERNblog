@@ -34,7 +34,7 @@ router.post('/add', async (req, res) => {
 
 router.post('/entrancelocalstorage', async (req, res) => {
     try{
-        await User.find({id: req.body.userId}).then(one => {
+        await User.find({_id: req.body.userId}).then(one => {
             res.status(200).json(one)
         })
     } catch(e){

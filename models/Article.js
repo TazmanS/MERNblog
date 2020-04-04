@@ -20,6 +20,10 @@ const schema = new Schema({
     author: {
         type: String,
         required: true
+    },
+    authorId: {
+        type: String,
+        require: true
     }
 })
 
