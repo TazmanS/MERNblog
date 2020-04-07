@@ -1,13 +1,12 @@
-import {GET_ALL_ARTICLES, DELETE_ARTICLE} from './actionTypes'
+import {GET_ALL_ARTICLES} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
-import {getAllAuthorArticles} from './articleAuthor'
 
 export function getAllArticles(){
     return async dispatch => {
         try{
             await axios.get('/api/article/all')
-                .then((res) => {
+                .then( res => {
                     dispatch({
                         type: GET_ALL_ARTICLES,
                         payload: res.data
@@ -59,9 +58,29 @@ export function updateArticle(newArticleData, articleId) {
                 articleId: articleId
             }
             await axios.post('/api/article/updatearticle', data).then((res) => {
-                console.log(res)
+                console.log("Статья обновлена")
             })
 
+        } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function changePage(indexPage){
+    return async dispatch =>{
+        try{
+            const data = {
+                indexPage: indexPage
+            }
+            await axios.post('/api/article/changepage', data).then( res => {
+                dispatch({
+                    type: GET_ALL_ARTICLES,
+                    payload: res.data,
+                    activePage: indexPage
+                })
+            })
+            
         } catch(e){
             console.log(e)
         }

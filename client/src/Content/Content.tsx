@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import {changePage} from '../actions/articleAction'
 
 interface Article {
     articles: [{
@@ -10,10 +11,19 @@ interface Article {
         date: String,
         _id: String,
         author: String
-    }]
+    }],
+    page: any,
+    changePage(indexPage) :void,
+    activePage: Number
 }
 
-const Content:React.FC<Article> = ({ articles }) => {
+const Content:React.FC<Article> = ({ articles, page, changePage, activePage = 0 }) => {
+
+    useEffect(() => {
+        paginationFunction()
+    }, [page])
+
+    const [pagination, setPagination] = useState<number[]>([])
 
     const body = articles.map((one, index) => {
 
@@ -37,20 +47,61 @@ const Content:React.FC<Article> = ({ articles }) => {
                         </div>
                     </article>
                 </div>
-            </div>
+                </div>
             </div>
         )
     })
 
+    const paginationFunction = () => {
+
+        let arr: number[] = pagination.concat()
+
+        for(let i = 0; i < page; i++){
+            arr.push(i)
+        }
+        setPagination(arr)
+    }
+    const paginationMenu = pagination.map((one, index) => {
+        let active = ""
+        if(index === activePage){
+            active = ' active'
+        }
+        return(
+            <li className={`page-item ${active}`} key={index}>
+                <Link className="page-link"  to="#"
+                    onClick={ () => changePage(index)}
+                >{one + 1}</Link>
+            </li>
+        )
+    })
+
     return(
-        <div>{body}</div>
+        <React.Fragment>
+            <div>{body}</div> 
+            <div>
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination">
+                        {paginationMenu}
+                    </ul>
+                </nav>    
+            </div>
+        </React.Fragment>
+        
     )
 }
 
 function mapStateToProps(state){
     return{
-        articles: state.articles
+        articles: state.articles.articles,
+        page: state.articles.page,
+        activePage: state.articles.activePage
     }
 }
 
-export default connect(mapStateToProps)(Content)
+function mapDispatchToProps(dispatch){
+    return{
+        changePage: indexPage => dispatch( changePage(indexPage) )
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Content)

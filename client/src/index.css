@@ -26,6 +26,8 @@ code {
   border-radius: 25px;
   background-color: white;
   box-shadow: 5px 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .active-border-green{
