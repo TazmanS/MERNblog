@@ -1,7 +1,10 @@
 const {Router} = require('express')
 const User = require('../models/User')
+const Article = require('../models/Article')
 
 const router = Router()
+
+// api/user/
 
 router.post('/add', async (req, res) => {
     try{
@@ -56,6 +59,49 @@ router.post('/entrance', async (req, res) => {
             }
         }) 
 
+
+    } catch(e){
+        console.log(e)
+    }
+})
+
+router.post('/userdelete', async (req, res) => {
+    try{
+
+        let userData = {
+            login: req.body.login,
+            password: req.body.userPassword
+        }
+
+        await User.findOne(userData).then(data => {
+            if(!data){
+                return res.status(201).json("Не вверный пароль")
+            } else{
+                console.log("Пользователь найден")
+            }
+        })
+
+        if(req.body.leaveArticles){
+            await Article.find({authorId: req.body.userId}).then(data => {
+                data.forEach(async one => {
+                    let dataForUpdate = {
+                        author: "Author delete",
+                        authorId: null
+                    }
+                    await Article.findByIdAndUpdate(one._id, dataForUpdate)
+                })
+            })
+        } else{
+            await Article.find({authorId: req.body.userId}).then(data => {
+                data.forEach(async one => {
+                    await Article.findByIdAndDelete(one._id)
+                })
+            })
+        }
+
+        await User.findOneAndDelete({password: req.body.userPassword}).then(() =>{
+            return res.status(200).json('Пользователь удален')
+        })
 
     } catch(e){
         console.log(e)
