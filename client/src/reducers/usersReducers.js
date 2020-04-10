@@ -1,7 +1,8 @@
 import {ADD_NEW_USER_INFORMATION, 
     USER_ENTRANCE,
     USER_ENTRANCE_FALSE,
-    USER_EXIT} from '../actions/actionTypes'
+    USER_EXIT,
+    USER_DELETE} from '../actions/actionTypes'
 
 const initialState = {
     userCreatingInformation: "",
@@ -47,7 +48,16 @@ switch(action.type){
             id: '',
             userTokenBool: false,
             userEntranceInformation: ''
-        }    
+        }   
+        
+    case USER_DELETE:
+        return{
+            userCreatingInformation: "",
+            login: '',
+            id: '',
+            userTokenBool: false,
+            userEntranceInformation: ''
+        }
 
 
     default: return state

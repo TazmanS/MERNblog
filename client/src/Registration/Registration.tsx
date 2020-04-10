@@ -1,14 +1,22 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import verty from '../hooks/verty.hooks'
 import {addNewUser} from '../actions/userAction'
+import {withRouter} from 'react-router-dom'
 
 interface Reg {
     addNewUser(newUserData) :void,
-    user: any
+    user: any,
+    history: any
 }
 
-const Registration:React.FC<Reg> = ({ addNewUser, user }) =>{
+const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
+
+    useEffect(() => {
+        if(user.login){
+            history.push('/')  
+        }
+    }, [user.login])
 
     const [inputLogin, setInputLogin] = useState('')
     const [inputPassword, setInputPassword] = useState('')
@@ -113,4 +121,4 @@ function mapDispatchToProps(dispatch){
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Registration)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Registration))

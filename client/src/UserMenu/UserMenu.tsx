@@ -22,7 +22,7 @@ const UserMenu:React.FC<UserMenu> = ({user, userExit, history}) => {
             </div>
             <Link className="navbar-brand" to="/add">Добавить статью </Link>
             <Link className="navbar-brand" to="/redactor">Список моих работ </Link>
-            <Link className="navbar-brand" to="/add">Настройки профиля </Link>
+            <Link className="navbar-brand" to="/settings">Настройки профиля </Link>
         </div>
     )
 }

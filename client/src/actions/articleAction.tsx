@@ -52,7 +52,6 @@ export function deleteArticle(articleId){
 export function updateArticle(newArticleData, articleId) {
     return async dispatch => {
         try{
-
             const data = {
                 newArticleData: newArticleData,
                 articleId: articleId
@@ -60,7 +59,6 @@ export function updateArticle(newArticleData, articleId) {
             await axios.post('/api/article/updatearticle', data).then((res) => {
                 console.log("Статья обновлена")
             })
-
         } catch(e){
             console.log(e)
         }

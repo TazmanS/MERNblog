@@ -1,7 +1,8 @@
 import {ADD_NEW_USER_INFORMATION, 
     USER_ENTRANCE, 
     USER_ENTRANCE_FALSE, 
-    USER_EXIT} from './actionTypes'
+    USER_EXIT,
+    USER_DELETE} from './actionTypes'
 import axios from 'axios'
 
 
@@ -29,13 +30,15 @@ export function userEntranceLocalStorage(userId){
             const data = {
                 userId: userId
             }
+
             axios.post('/api/user/entrancelocalstorage', data).then( res => {
                 dispatch({
                     type: USER_ENTRANCE,
                     login: res.data[0].login,
                     id: res.data[0]._id
                 })
-            })
+            })    
+            
         } catch(e){
             console.log("Ошибка входа", e)
         }
@@ -73,6 +76,27 @@ export function userExit(){
             dispatch({
                 type: USER_EXIT
             })
+        } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function userDelete(data){
+    return async dispatch => {
+        try{
+            await axios.post('/api/user/userdelete', data).then((data) => {
+                if(data.status === 201){
+                    console.log(data.data)
+                } else{
+                    console.log("Пользователь удален")
+                    localStorage.removeItem('user')
+                    dispatch({
+                        type: USER_DELETE
+                    })
+                }
+            })
+
         } catch(e){
             console.log(e)
         }

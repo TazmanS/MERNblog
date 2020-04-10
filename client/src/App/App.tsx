@@ -11,6 +11,8 @@ import {userEntranceLocalStorage} from '../actions/userAction'
 import Registration from '../Registration/Registration'
 import Article from '../Article/Article'
 import RedactorArticle from '../RedactorArticle/RedactorArticle'
+import UserSettings from '../UserSettings/UserSettings'
+import UserDelete from '../UserSettings/UserDelete'
 
 
 interface App {
@@ -36,16 +38,18 @@ const App:React.FC<App> = ({ getAllArticles, userEntranceLocalStorage, user }) =
           <div className="col-12">
             <Navigation />
           </div>
-          <div className="col-8 content">
+          <div className="col-12 order-2 order-lg-1 col-lg-8 content">
             <Switch>
               <Route path="/" exact component={Content} />
               <Route path="/registration" exact component={Registration} /> 
               <Route path="/add" exact component={AddContent} /> 
               <Route path="/article" exact component={Article} />
               <Route path="/redactor" exact component={RedactorArticle} />
+              <Route path="/settings" exact component={UserSettings} />
+              <Route path="/deleteuser" exact component={UserDelete} />
             </Switch>
           </div>
-          <div className="col-3 RnavBar">
+          <div className="col-12 order-1 order-lg-2 col-lg-3 RnavBar">
             <RnavBar />
           </div>
         </div>
@@ -63,7 +67,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
       getAllArticles: () => dispatch( getAllArticles() ),
-      userEntranceLocalStorage: (userId) => dispatch( userEntranceLocalStorage(userId) )
+      userEntranceLocalStorage: userId => dispatch( userEntranceLocalStorage(userId) )
   }
 }
 

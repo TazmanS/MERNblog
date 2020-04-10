@@ -1,6 +1,6 @@
 
 const verty = (...string) => {
-    for(let str of string){
+    for(const str of string){
         if (str.trim().length > 0){
             
         }

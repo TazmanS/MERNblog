@@ -5,10 +5,11 @@ import {connect} from 'react-redux'
 
 interface GetAll {
     getAllArticles(): void,
-    user: any
+    user: any,
+    articles: any
 }
 
-const Navigation:React.FC<GetAll> = ({getAllArticles, user}) => {
+const Navigation:React.FC<GetAll> = ({getAllArticles, user, articles}) => {
 
     return(
         <nav className="navbar 
@@ -32,7 +33,7 @@ const Navigation:React.FC<GetAll> = ({getAllArticles, user}) => {
                     <li className="nav-item">
                         <Link className="nav-link" to="/"
                             onClick={getAllArticles}
-                        >На главную <span className="sr-only">(current)</span></Link>
+                        >На главную (в базе {articles.articlesNumber} статей) <span className="sr-only">(current)</span></Link>
                     </li>
                     {user.id
                         ? null
@@ -48,7 +49,8 @@ const Navigation:React.FC<GetAll> = ({getAllArticles, user}) => {
 
 function mapStateToProps(state){
     return{
-        user: state.user
+        user: state.user,
+        articles: state.articles
     }
 }
 
