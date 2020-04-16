@@ -24,6 +24,10 @@ const schema = new Schema({
     authorId: {
         type: String,
         require: true
+    },
+    comments: {
+        type: Array,
+        require: false
     }
 })
 
