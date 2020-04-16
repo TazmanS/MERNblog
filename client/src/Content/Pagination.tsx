@@ -14,16 +14,18 @@ const Pagination:React.FC<Pagination> = ({page, changePage, activePage = 0}) =>{
     const [pagination, setPagination] = useState<number[]>([])
 
     useEffect(() => {
+        function paginationFunction(){
+            let arr: number[] = []
+            for(let i = 0; i < page; i++){
+                arr.push(i)
+            }
+            setPagination(arr)
+        }
+
         paginationFunction()
     }, [page])
 
-    function paginationFunction(){
-        let arr: number[] = pagination.concat()
-        for(let i = 0; i < page; i++){
-            arr.push(i)
-        }
-        setPagination(arr)
-    }
+    
 
     const paginationMenu = pagination.map((one, index) => {
         let active = ""

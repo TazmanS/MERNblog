@@ -37,7 +37,7 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
             setHashTagArray(history.location.article.hashTag)
             setVertyInfo(true)
         }
-    }, [])
+    }, [history.location.article])
 
     const titleChangeFunction = event =>{
         setTitleChange(event.target.value)

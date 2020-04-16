@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {getAllAuthorArticles} from '../actions/articleAuthor'
-import {deleteArticle} from '../actions/articleAction'
+import {deleteArticle, getAllArticles} from '../actions/articleAction'
 import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 
@@ -10,7 +10,9 @@ interface RedactorArticle {
     user: any,
     authorArticle: [any],
     history: any,
-    deleteArticle(articleId) :void
+    deleteArticle(articleId) :void,
+    articles: any,
+    getAllArticles() :void
 }
 
 const RedactorArticle:React.FC<RedactorArticle> = ({ 
@@ -18,7 +20,9 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
     user, 
     authorArticle,
     history,
-    deleteArticle }) => {
+    deleteArticle,
+    articles,
+    getAllArticles }) => {
         
     useEffect(() => {
         let local = localStorage.getItem("user")
@@ -26,12 +30,13 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
             history.push('/')
         }
         getAllAuthorArticles(user.id || local)
-    }, [])
+    }, [articles, getAllAuthorArticles, user.id, history])
 
     const deleteArticleFunction = async (articleId) => {
         await deleteArticle(articleId)
 
         let authorId = localStorage.getItem('user')
+        await getAllArticles()
         await getAllAuthorArticles(authorId)
     }
 
@@ -40,7 +45,7 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
             <div key={index} className="article-cart">
                 <h3>{one.title}</h3>
                 <p>Автор - {one.author}</p>
-                <p>Дата написания - {one.date}</p>
+                <p>Дата написания - {one.date} / Коментов - {one.comments.length}</p>
                 <Link className="btn btn-sm btn-success" to={{
                                     pathname: "/article",
                                     article: one
@@ -70,14 +75,16 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
 function mapStateToProps(state){
     return{
         user: state.user,
-        authorArticle: state.authorArticle
+        authorArticle: state.authorArticle,
+        articles: state.articles.articles
     }
 }
 
 function mapDispatchToProps(dispatch){
     return{
         getAllAuthorArticles: userId => dispatch( getAllAuthorArticles(userId) ),
-        deleteArticle: articleId => dispatch( deleteArticle(articleId) )
+        deleteArticle: articleId => dispatch( deleteArticle(articleId) ),
+        getAllArticles: () => dispatch( getAllArticles() )
     }
 }
 

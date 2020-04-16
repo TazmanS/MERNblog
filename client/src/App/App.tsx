@@ -29,7 +29,7 @@ const App:React.FC<App> = ({ getAllArticles, userEntranceLocalStorage, user }) =
       userEntranceLocalStorage(userId)
     }
     getAllArticles()
-  }, [])
+  }, [getAllArticles, userEntranceLocalStorage])
 
   return(
     <Router>

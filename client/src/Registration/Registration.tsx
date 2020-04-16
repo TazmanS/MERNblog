@@ -16,7 +16,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
         if(user.login){
             history.push('/')  
         }
-    }, [user.login])
+    }, [user.login, history])
 
     const [inputLogin, setInputLogin] = useState('')
     const [inputPassword, setInputPassword] = useState('')

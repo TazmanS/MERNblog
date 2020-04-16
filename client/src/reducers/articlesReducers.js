@@ -1,10 +1,20 @@
-import {GET_ALL_ARTICLES} from '../actions/actionTypes'
+import {GET_ALL_ARTICLES, CHANGE_PAGE} from '../actions/actionTypes'
 
 const initialState = {
-    articles: [],
-    page: null,
-    articlesNumber: 0,
-    activePage: 0
+    articles: [
+        // {
+        //     comments: [],
+        //     _id: "",
+        //     title: "",
+        //     text: "",
+        //     date: "",
+        //     author: "",
+        //     authorId: '',
+        //     hashTag: []
+        // }
+    ],
+    activePage: null,
+    page: null
 }
 
 const articlesReducers = (state = initialState, action) => {
@@ -17,6 +27,13 @@ switch(action.type){
             articles: [...action.payload.tenArticles],
             articlesNumber: action.payload.articlesNumber,
             page: Math.ceil(action.payload.articlesNumber/10),
+            activePage: action.activePage
+        }    
+
+    case CHANGE_PAGE:
+        return{
+            ...state,
+            articles: [...action.payload.tenArticles],
             activePage: action.activePage
         }
 

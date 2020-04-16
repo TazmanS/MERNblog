@@ -85,6 +85,7 @@ export function userExit(){
 export function userDelete(data){
     return async dispatch => {
         try{
+            console.log(data)
             await axios.post('/api/user/userdelete', data).then((data) => {
                 if(data.status === 201){
                     console.log(data.data)

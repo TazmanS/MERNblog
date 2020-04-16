@@ -7,4 +7,6 @@ export const USER_EXIT = "USER_EXIT"
 export const GET_ALL_AUTHOR_ARTICLES = "GET_ALL_AUTHOR_ARTICLES"
 export const DELETE_ARTICLE = "DELETE_ARTICLE"
 export const USER_DELETE = "USER_DELETE"
+export const NEW_COMMENT = "NEW_COMMENT"
+export const CHANGE_PAGE = "CHANGE_PAGE"
 

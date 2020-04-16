@@ -10,12 +10,13 @@ interface Article {
         hashTag: String,
         date: String,
         _id: String,
-        author: String
+        author: String,
+        comments: [any]
     }]
 }
 
 const Content:React.FC<Article> = ({ articles }) => {
-    
+
     const body = articles.map((one, index) => {
 
         let shortText = one.text.slice(0,100)
@@ -31,10 +32,12 @@ const Content:React.FC<Article> = ({ articles }) => {
                     <div className="post-footer">
                         <Link className="more-link" to={{
                             pathname: "/article",
-                            article: one
+                            index: index
                         }}>Продолжить чтение</Link>
                     </div>
-                    <p>Автор: {one.author} - {one.date}</p>
+                    <p>Автор: {one.author} - {one.date} 
+                        <small> (Коментов - {one.comments.length}) </small>
+                    </p>
                 </div>
             </article>
         </div>
@@ -45,7 +48,9 @@ const Content:React.FC<Article> = ({ articles }) => {
 
     return(
         <React.Fragment>
-            <div>{body}</div> 
+            <div>{articles.length > 0
+                ? body
+                : <p>В базе пусто</p>}</div> 
             <Pagination />
         </React.Fragment>
         

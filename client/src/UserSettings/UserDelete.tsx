@@ -15,7 +15,7 @@ const UserDelete:React.FC<UserDelete> = ({userDelete, user, history }) => {
         if(!localStorage.getItem('user')){
             history.push('/')    
         }
-    }, [user.login])
+    }, [user.login, history])
 
     const [userPassword, setUserPassword] = useState('')
     const [leaveArticles, setLeaveArticles] = useState(false)

@@ -1,26 +1,31 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {userExit} from '../actions/userAction'
+import Comments from './Comments'
 
 interface Article {
-    history: any
+    history: any,
+    articles: any
 }
 
-const Article:React.FC<Article> = ({ history }) => {
+const Article:React.FC<Article> = ({ history, articles }) => {
+
+    const {index = 0} = history.location
     return(
         <div>
             <div className="container">
                 <div className="posts-list">
                     <article className="post">
                         <div className="post-content">
-                        <h2 className="post-title">{history.location.article.title}</h2>
-                            <p>{history.location.article.text}</p>
+                        <h2 className="post-title">{articles[index].title}</h2>
+                            <p>{articles[index].text}</p>
                             <div className="post-footer">
-                                Автор: {history.location.article.author} - {history.location.article.date}
+                                Автор: {articles[index].author} - {articles[index].date}
                             </div>
-                            <div>Хэдштег: #{history.location.article.hashTag.join(" #")}</div>
+                            <div>Хэдштег: #{articles[index].hashTag.join(" #")}</div>
                         </div>
                     </article>
+                    <Comments index={index}/>
                 </div>
             </div>
         </div>
@@ -30,7 +35,7 @@ const Article:React.FC<Article> = ({ history }) => {
 function mapStateToProps(state){
     return{
         user: state.user,
-        article: state.article
+        articles: state.articles.articles
     }
 }
 
