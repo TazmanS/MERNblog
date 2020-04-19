@@ -9,8 +9,8 @@ interface Article {
 }
 
 const Article:React.FC<Article> = ({ history, articles }) => {
-
     const {index = 0} = history.location
+
     return(
         <div>
             <div className="container">
@@ -25,7 +25,7 @@ const Article:React.FC<Article> = ({ history, articles }) => {
                             <div>Хэдштег: #{articles[index].hashTag.join(" #")}</div>
                         </div>
                     </article>
-                    <Comments index={index}/>
+                    <Comments article={articles[index]} />
                 </div>
             </div>
         </div>
@@ -33,9 +33,14 @@ const Article:React.FC<Article> = ({ history, articles }) => {
 }
 
 function mapStateToProps(state){
-    return{
-        user: state.user,
-        articles: state.articles.articles
+    if(state.authorFlag.authorFlag){
+        return{
+            articles: state.authorArticles.articles
+        }
+    } else{
+        return{
+            articles: state.articles.articles
+        }
     }
 }
 

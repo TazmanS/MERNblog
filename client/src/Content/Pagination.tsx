@@ -2,14 +2,21 @@ import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {changePage} from '../actions/articleAction'
+import {changePageAuthor} from '../actions/articleAuthor'
 
 interface Pagination {
     changePage(indexPage): void,
     activePage: Number,
-    page: Number
+    page: Number,
+    authorFlag: Boolean,
+    changePageAuthor(index) :void
 }
 
-const Pagination:React.FC<Pagination> = ({page, changePage, activePage = 0}) =>{
+const Pagination:React.FC<Pagination> = ({page, 
+    changePage, 
+    activePage = 0, 
+    authorFlag,
+    changePageAuthor}) =>{
 
     const [pagination, setPagination] = useState<number[]>([])
 
@@ -25,7 +32,14 @@ const Pagination:React.FC<Pagination> = ({page, changePage, activePage = 0}) =>{
         paginationFunction()
     }, [page])
 
-    
+    const changePageFunction = (index) => {
+        if(authorFlag){
+            changePageAuthor(index)
+        } else{
+            changePage(index)
+        }
+        
+    }
 
     const paginationMenu = pagination.map((one, index) => {
         let active = ""
@@ -35,7 +49,7 @@ const Pagination:React.FC<Pagination> = ({page, changePage, activePage = 0}) =>{
         return(
             <li className={`page-item ${active}`} key={index}>
                 <Link className="page-link"  to="#"
-                    onClick={ () => changePage(index)}
+                    onClick={ () => changePageFunction(index)}
                 >{one + 1}</Link>
             </li>
         )
@@ -53,15 +67,26 @@ const Pagination:React.FC<Pagination> = ({page, changePage, activePage = 0}) =>{
 }
 
 function mapStateToProps(state){
-    return{
-        page: state.articles.page,
-        activePage: state.articles.activePage
+    if(state.authorFlag.authorFlag){
+        return{
+            page: state.authorArticles.page,
+            activePage: state.authorArticles.activePage,
+            authorFlag: state.authorFlag.authorFlag
+        }
+    } else{
+        return{
+            page: state.articles.page,
+            activePage: state.articles.activePage,
+            authorFlag: state.authorFlag.authorFlag
+        }
     }
 }
 
 function mapDispatchToProps(dispatch){
     return{
-        changePage: indexPage => dispatch( changePage(indexPage) )
+        changePage: indexPage => dispatch( changePage(indexPage) ),
+        changePageAuthor: indexPage => dispatch( changePageAuthor(indexPage) ),
+
     }
 }
 

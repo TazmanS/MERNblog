@@ -1,32 +1,33 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {addNewComment, changePage} from '../actions/articleAction'
+import { changePageAuthor } from '../actions/articleAuthor'
+import { store } from '..'
 
 interface Comments {
-    articles: any,
     login: String,
     addNewComment(article, login, comment) :void
-    changePage() :void,
-    index: any,
-    activePage: Number
+    changePage(activePage) :void,
+    activePage: Number,
+    authorFlag: Boolean,
+    article: any,
+    changePageAuthor(activePage) :void
 }
 
 const Comments:React.FC<Comments> = ({ 
-    articles, 
-    index, 
     login, 
     addNewComment, 
     changePage,
-    activePage }) => {
-
-    const article = articles[index]
+    activePage,
+    authorFlag,
+    article,
+    changePageAuthor }) => {
 
     const [comment, setComment] = useState('')
 
     const commentFunction = event => {
         setComment(event.target.value)
     }
-
     const addNewCommentFunction = async () => {
 
         if(!login.trim()){
@@ -37,7 +38,11 @@ const Comments:React.FC<Comments> = ({
 
         setComment('')
 
-        await changePage()
+        if(authorFlag){
+            await changePageAuthor(activePage)
+        } else{
+            await changePage(activePage)
+        }
     }
 
     const commentList = article.comments.map((one, index) => {
@@ -48,7 +53,6 @@ const Comments:React.FC<Comments> = ({
                 </p>    
                 <hr />
             </React.Fragment>
-            
         )
     })
 
@@ -79,17 +83,26 @@ const Comments:React.FC<Comments> = ({
 }
 
 function mapStateToProps(state){
-    return{
-        login: state.user.login,
-        articles: state.articles.articles,
-        activePage: state.articles.articles
+    if(store.getState().authorFlag.authorFlag){
+        return{
+            login: state.user.login,
+            activePage: state.authorArticles.activePage,
+            authorFlag: state.authorFlag.authorFlag
+        }
+    } else{
+        return{
+            login: state.user.login,
+            activePage: state.articles.activePage,
+            authorFlag: state.authorFlag.authorFlag
+        }    
     }
 }
 
 function mapDispatchToProps(dispatch){
     return{
         addNewComment: (article, login, comment) => dispatch( addNewComment(article, login, comment) ),
-        changePage: () => dispatch( changePage() )
+        changePage: (activePage) => dispatch( changePage(activePage) ),
+        changePageAuthor: (activePage) => dispatch( changePageAuthor(activePage) ),
     }
 }
 

@@ -1,28 +1,27 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {getAllAuthorArticles} from '../actions/articleAuthor'
-import {deleteArticle, getAllArticles} from '../actions/articleAction'
+import {deleteArticle} from '../actions/articleAction'
 import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
+import Pagination from '../Content/Pagination'
 
 interface RedactorArticle {
     getAllAuthorArticles(userId) :any,
     user: any,
-    authorArticle: [any],
+    authorArticles: any,
     history: any,
     deleteArticle(articleId) :void,
-    articles: any,
     getAllArticles() :void
 }
 
 const RedactorArticle:React.FC<RedactorArticle> = ({ 
     getAllAuthorArticles, 
-    user, 
-    authorArticle,
+    user,
     history,
     deleteArticle,
-    articles,
-    getAllArticles }) => {
+    getAllArticles,
+    authorArticles }) => {
         
     useEffect(() => {
         let local = localStorage.getItem("user")
@@ -30,7 +29,7 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
             history.push('/')
         }
         getAllAuthorArticles(user.id || local)
-    }, [articles, getAllAuthorArticles, user.id, history])
+    }, [getAllAuthorArticles, user.id, history])
 
     const deleteArticleFunction = async (articleId) => {
         await deleteArticle(articleId)
@@ -40,7 +39,7 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
         await getAllAuthorArticles(authorId)
     }
 
-    const body = authorArticle.map((one, index) => {
+    const body = authorArticles.map((one, index) => {
         return(
             <div key={index} className="article-cart">
                 <h3>{one.title}</h3>
@@ -48,7 +47,7 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
                 <p>Дата написания - {one.date} / Коментов - {one.comments.length}</p>
                 <Link className="btn btn-sm btn-success" to={{
                                     pathname: "/article",
-                                    article: one
+                                    index: index
                                 }}>Просмотреть статью</Link>
                 <Link className="btn btn-sm btn-success" to={{
                                     pathname: "/add",
@@ -59,15 +58,17 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
                 >Удалить статью</button>
                 <hr />
             </div>
+            
         )
     })
 
     return(
         <div>
-            {authorArticle.length > 0
+            {authorArticles.length > 0
             ?   <div>{body}</div>
             :   <p>У Вас нет статей</p>
             }
+            <Pagination />
         </div>
     )
 }
@@ -75,8 +76,7 @@ const RedactorArticle:React.FC<RedactorArticle> = ({
 function mapStateToProps(state){
     return{
         user: state.user,
-        authorArticle: state.authorArticle,
-        articles: state.articles.articles
+        authorArticles: state.authorArticles.articles
     }
 }
 
@@ -84,7 +84,6 @@ function mapDispatchToProps(dispatch){
     return{
         getAllAuthorArticles: userId => dispatch( getAllAuthorArticles(userId) ),
         deleteArticle: articleId => dispatch( deleteArticle(articleId) ),
-        getAllArticles: () => dispatch( getAllArticles() )
     }
 }
 

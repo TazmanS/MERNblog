@@ -1,7 +1,9 @@
-import {GET_ALL_ARTICLES, CHANGE_PAGE} from './actionTypes'
+import {GET_ALL_ARTICLES, 
+    CHANGE_PAGE,
+    AUTHOR_FLAG_FALSE} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
-import {store} from '../index'
+// import {store} from '../index'
 
 export function getAllArticles(){
     return async dispatch => {
@@ -12,6 +14,11 @@ export function getAllArticles(){
                     dispatch({
                         type: GET_ALL_ARTICLES,
                         payload: res.data
+                    })
+                })
+                .then(() => {
+                    dispatch({
+                        type: AUTHOR_FLAG_FALSE
                     })
                 })
         } catch(e){
@@ -67,13 +74,15 @@ export function updateArticle(newArticleData, articleId) {
     }
 }
 
-export function changePage(indexPage = store.getState().articles.activePage){
+export function changePage(indexPage){
     return async dispatch =>{
         try{
+            
             const data = {
                 indexPage: indexPage
             }
             await axios.post('/api/article/changepage', data).then( res => {
+                console.log(res)
                 dispatch({
                     type: CHANGE_PAGE,
                     payload: res.data,
@@ -91,7 +100,7 @@ export function addNewComment(article, login, comment){
     return async dispatch => {
         try{
             let data = {
-                article, login, comment
+                id: article._id, login, comment
             }
 
             await axios.post('/api/article/addnewcomment', data)
@@ -102,3 +111,23 @@ export function addNewComment(article, login, comment){
         }
     }
 }
+
+// export function getAllAuthorArticles(authorId) {
+
+//     return async dispatch => {
+//         try{
+//             const data = {
+//                 authorId: authorId
+//             }
+//             await axios.post('/api/author/all', data).then( res => {
+//                 dispatch({
+//                     type: GET_ALL_ARTICLES,
+//                     payload: res.data,
+//                     authorFlag: true
+//                 })
+//             })
+//         } catch (e){
+//             console.log(e)
+//         }
+//     }
+// }
