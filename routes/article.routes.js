@@ -85,10 +85,10 @@ router.post('/changepage', async (req, res) => {
     }
 })
 
-router.post('/addnewcomment', async (req, res) => {
+router.post('/addnewcomment', async (req, res) => { 
     try{
 
-        await Article.findById(req.body.article._id).then( one => {
+        await Article.findById(req.body.id).then( one => {
             let newArr = one.comments.concat()
             let newComment = {
                 login : req.body.login,
@@ -97,7 +97,7 @@ router.post('/addnewcomment', async (req, res) => {
             newArr.push(newComment)
             let data = {comments: newArr}
 
-            Article.findByIdAndUpdate(req.body.article._id, data).then((one) => {
+            Article.findByIdAndUpdate(req.body.id, data).then((one) => {
                 return res.status(200).json(one)
             })
         })
