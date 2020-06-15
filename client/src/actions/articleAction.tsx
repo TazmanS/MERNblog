@@ -1,13 +1,14 @@
-import {GET_ALL_ARTICLES, 
+import {GET_ALL_ARTICLES,
     CHANGE_PAGE,
-    AUTHOR_FLAG_FALSE} from './actionTypes'
+    AUTHOR_FLAG_FALSE
+} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
 // import {store} from '../index'
 
 export function getAllArticles(){
     return async dispatch => {
-        
+
         try{
             await axios.get('/api/article/all')
                 .then( res => {
@@ -33,7 +34,7 @@ export function addNewArticle(newArticleData){
             const date = moment().format('MMMM Do YYYY')
 
             const data = {...newArticleData, date}
-            
+
             await axios.post('/api/article/add', data).then(() => {
                 console.log("Article add React")
             })
@@ -50,7 +51,7 @@ export function deleteArticle(articleId){
                 articleId: articleId
             }
             await axios.post('/api/article/delete', data).then(res =>{
-                
+
             })
         } catch(e){
             console.log(e)
@@ -77,19 +78,18 @@ export function updateArticle(newArticleData, articleId) {
 export function changePage(indexPage){
     return async dispatch =>{
         try{
-            
+
             const data = {
                 indexPage: indexPage
             }
             await axios.post('/api/article/changepage', data).then( res => {
-                console.log(res)
                 dispatch({
                     type: CHANGE_PAGE,
                     payload: res.data,
                     activePage: indexPage
                 })
             })
-            
+
         } catch(e){
             console.log(e)
         }

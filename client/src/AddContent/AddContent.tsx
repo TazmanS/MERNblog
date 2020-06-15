@@ -1,29 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {addNewArticle, getAllArticles, updateArticle} from '../actions/articleAction'
-import verty from '../hooks/verty.hooks'
+import {verty} from '../hooks/verty.hooks'
 import {withRouter} from 'react-router-dom'
+import ContentForm from './ContentForm'
+import {AddArticle} from '../interfaces'
 
-interface NewArticle {
-    title: String,
-    text: String,
-    hashTag: Array<any>
-}
 
-interface AddArticle {
-    addNewArticle(newArticleData: NewArticle) : any,
-    history: any,
-    user: any,
-    getAllArticles(): void,
-    updateArticle(newArticleData: NewArticle, articleId: String) : any
-}
-
-const AddContent:React.FC<AddArticle> = ({addNewArticle, 
-    history, 
-    user, 
-    getAllArticles, 
+const AddContent:React.FC<AddArticle> = ({addNewArticle,
+    history,
+    user,
+    getAllArticles,
     updateArticle}) =>{
-    
+
     const [titleChange, setTitleChange] = useState<string>('')
     const [textChange, setTextChange] = useState<string>('')
     const [hashTagChange, setHashTagChange] = useState<string>('')
@@ -36,6 +25,9 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
             setTextChange(history.location.article.text)
             setHashTagArray(history.location.article.hashTag)
             setVertyInfo(true)
+            document.title = "Redactor article"
+        } else{
+            document.title = "Add article"
         }
     }, [history.location.article])
 
@@ -44,7 +36,11 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
     }
 
     const textChangeFunction = event =>{
-        setTextChange(event.target.value)
+        if(event.target.value.length > 3000){
+            return false
+        } else{
+            setTextChange(event.target.value)
+        }
     }
 
     const hashTagFunction = event => {
@@ -56,7 +52,7 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
         if(verty(hashTagChange)){
             let newArr:any = hashTagArray.concat()
             newArr.push(hashTagChange)
-            setHashTagArray(newArr)  
+            setHashTagArray(newArr)
             setHashTagChange('')
         }
     }
@@ -84,13 +80,13 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
                 } else{
                     await addNewArticle(newArticleData).then(() => getAllArticles())
                 }
-                
+
                 setTitleChange('')
                 setTextChange('')
                 setHashTagChange('')
                 setVertyInfo(true)
                 history.push('/redactor')
-                
+
             } else{
                 console.error("Введите коректные данные")
                 setVertyInfo(false)
@@ -110,60 +106,19 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
 
 
     return(
-        <form>
-            <div className="form-group">
-                <label htmlFor="title">Название статьи</label>
-                <input type="text" 
-                    className={verty(titleChange) 
-                        ? "form-control active-border-green" 
-                        : "form-control active-border-red"}
-                    id="title" 
-                    placeholder="Как испечь вкусный тортик" 
-                    value={titleChange}
-                    onChange={ event => titleChangeFunction(event)}
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="text">Текст статьи</label>
-                <textarea 
-                    className={verty(textChange) 
-                        ? "form-control active-border-green" 
-                        : "form-control active-border-red"} 
-                    id="text" 
-                    rows={5}
-                    value={textChange}
-                    onChange={ event => textChangeFunction(event)}
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="hashtag">Хэдштег</label>
-                <div className="hashtagInput">
-                    <input 
-                        type="text" 
-                        className='form-control'
-                        id="hashtag" 
-                        placeholder="тортики, рецепты, наптики" 
-                        value={hashTagChange}
-                        onChange={(event) => hashTagFunction(event)}
-                    />
-                    <button className="btn btn-dark"
-                        onClick={event => hashTagArrayFunction(event)}
-                    >Добавить</button>    
-                </div>
-                <p className="hashTagContainer">
-                    {hashTagBody}    
-                </p>
-            </div>
-            <button className="btn btn-primary" onClick={async (event) =>{
-                event?.preventDefault()
-                addNewArticleFunction()
-            }}>{history.location.article
-                ? "Редактировать"
-                : "Добавить"}</button>
-            <span>
-                {vertyInfo ? null : <small>Неверный ввод</small>}
-            </span>
-        </form>
+        <ContentForm
+            titleChange={titleChange}
+            titleChangeFunction={titleChangeFunction}
+            textChange={textChange}
+            textChangeFunction={textChangeFunction}
+            hashTagChange={hashTagChange}
+            hashTagFunction={hashTagFunction}
+            hashTagArrayFunction={hashTagArrayFunction}
+            hashTagBody={hashTagBody}
+            addNewArticleFunction={addNewArticleFunction}
+            history={history}
+            vertyInfo={vertyInfo}
+        />
     )
 }
 
@@ -175,9 +130,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return{
-        addNewArticle: (newArticleData) => {
-            return dispatch( addNewArticle(newArticleData) ) 
-        },
+        addNewArticle: newArticleData => dispatch( addNewArticle(newArticleData) ),
         getAllArticles: () => dispatch( getAllArticles() ),
         updateArticle: (newArticleData, articleId) => dispatch( updateArticle(newArticleData, articleId) )
     }

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
-import verty from '../hooks/verty.hooks'
+import {verty} from '../hooks/verty.hooks'
 import {addNewUser} from '../actions/userAction'
 import {withRouter} from 'react-router-dom'
 
@@ -14,21 +14,37 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
 
     useEffect(() => {
         if(user.login){
-            history.push('/')  
+            history.push('/')
         }
+        document.title = "Registration"
     }, [user.login, history])
 
     const [inputLogin, setInputLogin] = useState('')
+    const [inputLoginClass, setInputLoginClass] = useState('form-control')
     const [inputPassword, setInputPassword] = useState('')
+    const [inputPasswordClass, setInputPasswordClass] = useState('form-control')
     const [inputPasswordRepeat, setInputPasswordRepeat] = useState('')
-    const [checkPass, setCheckPass] = useState(true) 
+    const [checkPass, setCheckPass] = useState(true)
 
     const loginChangeFunction = event => {
         setInputLogin(event.target.value)
+
+        if(event.target.value.length > 2 && event.target.value.length < 10){
+            setInputLoginClass('form-control is-valid')
+        } else{
+            setInputLoginClass('form-control is-invalid')
+        }
     }
+
 
     const passwordChangeFunction = event =>{
         setInputPassword(event.target.value)
+
+        if(event.target.value.length < 5 || event.target.value.length > 16){
+            setInputPasswordClass('form-control is-invalid')
+        } else{
+            setInputPasswordClass('form-control is-valid')
+        }
 
         if(inputPasswordRepeat === event.target.value){
             setCheckPass(true)
@@ -75,37 +91,49 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
     }
 
     return(
-        <form>
-            <h4>Регистация нового пользователя</h4>
-            <div className="form-group">
-                <label htmlFor="regInputLogin">Логин</label>
-                <input type="login" className="form-control" id="regInputLogin" placeholder="Введите Логин"
-                value={inputLogin} 
-                onChange={(event) => loginChangeFunction(event)} />
-            </div>
-            <div className="form-group">
-                <label htmlFor="regInputPass">Пароль (5 - 16 символов)</label>
-                <input type="password" className="form-control" id="regInputPass" placeholder="Пароль" 
-                value={inputPassword}
-                onChange={(event) => passwordChangeFunction(event) }
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="regInputPassAgain">Повторите Пароль</label>
-                <input type="password" className="form-control" id="regInputPassAgain" placeholder="Повторите Пароль" 
-                value={inputPasswordRepeat}
-                onChange={event => passwordRepeatChangeFunction(event)}
-                />
-            </div>
-            <button type="submit" className="btn btn-primary"
-                onClick={(event) => addNewUserFunction(event)}
-            >Регистация</button>
-            { checkPass 
-                ? <p></p>
-                : <small>Пароли не совпадают</small>
-            }
-            <p>{user.userCreatingInformation}</p>
-        </form>
+<form>
+    <h4>Регистация нового пользователя</h4>
+    <div className="form-group">
+        <label htmlFor="regInputLogin">Login</label>
+        <input type="login" className={inputLoginClass} id="regInputLogin" placeholder="Login"
+        value={inputLogin}
+        onChange={(event) => loginChangeFunction(event)} />
+        <div className="valid-feedback">
+            Looks good!
+        </div>
+        <div className="invalid-feedback">
+            Please choose a username.
+        </div>
+    </div>
+    <div className="form-group">
+        <label htmlFor="regInputPass">Password (5 - 16 symbols)</label>
+        <input type="password" className={inputPasswordClass} id="regInputPass" placeholder="Password"
+        value={inputPassword}
+        onChange={(event) => passwordChangeFunction(event) }
+        />
+        <div className="valid-feedback">
+            Looks good!
+        </div>
+        <div className="invalid-feedback">
+            Please choose a password.
+        </div>
+    </div>
+    <div className="form-group">
+        <label htmlFor="regInputPassAgain">Repeat password</label>
+        <input type="password" className="form-control" id="regInputPassAgain" placeholder="Repeat password"
+        value={inputPasswordRepeat}
+        onChange={event => passwordRepeatChangeFunction(event)}
+        />
+    </div>
+    <button type="submit" className="btn btn-primary"
+        onClick={(event) => addNewUserFunction(event)}
+    >Registration</button>
+    { checkPass
+        ? <p></p>
+        : <small>Пароли не совпадают</small>
+    }
+    <p>{user.userCreatingInformation}</p>
+</form>
     )
 }
 

@@ -34,4 +34,23 @@ router.post('/changepageauthor', async (req, res) => {
     }
 })
 
+router.post('/deletecomment', async (req, res) => {
+    try {
+        await Article.findById(req.body.articleId).then(one => {
+            const newComments = one.comments.concat()
+            newComments.splice(req.body.commentIndex, 1)
+
+            const article = {
+                comments: [...newComments]
+            }
+            
+            Article.findByIdAndUpdate(req.body.articleId, article).then(() => {
+                return res.status(200).json(one) 
+            })
+        })
+    } catch(e) {
+        console.log(e)
+    }
+})
+
 module.exports = router
