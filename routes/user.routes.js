@@ -85,7 +85,7 @@ router.post('/userdelete', async (req, res) => {
             await Article.find({authorId: req.body.userId}).then(data => {
                 data.forEach(async one => {
                     let dataForUpdate = {
-                        author: "Author delete",
+                        author: "Автор удален",
                         authorId: null
                     }
                     await Article.findByIdAndUpdate(one._id, dataForUpdate)

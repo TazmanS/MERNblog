@@ -2,19 +2,22 @@ import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {userDelete} from '../actions/userAction'
 import {withRouter} from 'react-router-dom'
+import {getAllArticles} from '../actions/articleAction'
 
 interface UserDelete{
-    userDelete(data) :any,
+    userDelete(data): void,
     user: any,
-    history: any
+    history: any,
+    getAllArticles(): void
 }
 
-const UserDelete:React.FC<UserDelete> = ({userDelete, user, history }) => {
+const UserDelete:React.FC<UserDelete> = ({userDelete, user, history, getAllArticles }) => {
 
     useEffect(() => {
         if(!localStorage.getItem('user')){
-            history.push('/')    
+            history.push('/')
         }
+        document.title = "Delete user"
     }, [user.login, history])
 
     const [userPassword, setUserPassword] = useState('')
@@ -33,14 +36,16 @@ const UserDelete:React.FC<UserDelete> = ({userDelete, user, history }) => {
             login: user.login
         }
 
-        userDelete(data)
+        await userDelete(data)
+        await getAllArticles()
+
     }
 
     return(
         <div>
             <h3>Удаление пользователя</h3>
             <div className="form-check">
-                <input type="checkbox" className="form-check-input" id="leaveArticle" 
+                <input type="checkbox" className="form-check-input" id="leaveArticle"
                     onChange={() => setLeaveArticles(!leaveArticles)}
                 />
                 <label className="form-check-label" htmlFor="leaveArticle">Оставить статьи?</label>
@@ -49,20 +54,20 @@ const UserDelete:React.FC<UserDelete> = ({userDelete, user, history }) => {
             <div className="form-group">
                     <label htmlFor="passwordUser">Введите Ваш пароль</label>
                         <div className="hashtagInput">
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             className='form-control'
-                            id="passwordUser" 
-                            placeholder="Пароль" 
+                            id="passwordUser"
+                            placeholder="Пароль"
                             value={userPassword}
                             onChange={ event => userPasswordFunction(event)}
                         />
                         <button className="btn btn-dark"
                             onClick={deleteUserFunction}
-                        >Удалить пользователя</button>    
+                        >Удалить пользователя</button>
                 </div>
             </div>
-            
+
         </div>
     )
 }
@@ -75,7 +80,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return{
-        userDelete: (data) => dispatch( userDelete(data) )
+        userDelete: (data) => dispatch( userDelete(data) ),
+        getAllArticles: () => dispatch( getAllArticles() ),
     }
 }
 

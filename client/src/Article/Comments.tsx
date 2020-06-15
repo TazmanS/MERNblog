@@ -3,41 +3,40 @@ import {connect} from 'react-redux'
 import {addNewComment, changePage} from '../actions/articleAction'
 import { changePageAuthor } from '../actions/articleAuthor'
 import { store } from '..'
+import {deleteComment} from '../actions/articleAuthor'
+import {getAllAuthorArticles} from '../actions/articleAuthor'
+import CommentList from './CommentList'
+import AddComment from './AddComment'
+import {CommentsInterface} from '../interfaces'
 
-interface Comments {
-    login: String,
-    addNewComment(article, login, comment) :void
-    changePage(activePage) :void,
-    activePage: Number,
-    authorFlag: Boolean,
-    article: any,
-    changePageAuthor(activePage) :void
-}
-
-const Comments:React.FC<Comments> = ({ 
-    login, 
-    addNewComment, 
-    changePage,
+const Comments:React.FC<CommentsInterface> = ({
+    article,
+    login,
     activePage,
     authorFlag,
-    article,
-    changePageAuthor }) => {
+    changePage,
+    changePageAuthor,
+    deleteComment,
+    addNewComment,
+    getAllAuthorArticles }) => {
 
     const [comment, setComment] = useState('')
+    const userId = localStorage.getItem('user')
 
     const commentFunction = event => {
-        setComment(event.target.value)
+        if(event.target.value.length <= 150) {
+            setComment(event.target.value)
+        } else {
+            setComment(comment)
+        }
     }
-    const addNewCommentFunction = async () => {
 
+    const addNewCommentFunction = async () => {
         if(!login.trim()){
             login = "Гость"
         }
-
         await addNewComment(article, login, comment)
-
         setComment('')
-
         if(authorFlag){
             await changePageAuthor(activePage)
         } else{
@@ -45,56 +44,41 @@ const Comments:React.FC<Comments> = ({
         }
     }
 
-    const commentList = article.comments.map((one, index) => {
-        return(
-            <React.Fragment key={index}>
-                <p>
-                    <small>{index + 1}. {one.login}</small> - {one.comment}
-                </p>    
-                <hr />
-            </React.Fragment>
-        )
-    })
+    const deleteCommentFunction = async commentIndex => {
+        await deleteComment(commentIndex, article._id)
+
+        await getAllAuthorArticles(userId)
+    }
 
     return(
-        
-        <div>
-            <div className="form-group">
-                <label htmlFor="comments">Коментарии</label>
-                <div className="">
-                    <textarea  
-                        className='form-control'
-                        id="comments" 
-                        placeholder="Напишите свое мнение" 
-                        value={comment}
-                        onChange={ event => {
-                            commentFunction(event)
-                        }}
-                    />
-                    <button className="btn btn-dark"
-                        onClick={ addNewCommentFunction }
-                    >Добавить коментарий</button>  
-                    {commentList}  
-                </div>
-            </div>
+
+<div>
+    <div className="form-group">
+        <div className="">
+            <AddComment
+                comment={comment}
+                commentFunction={commentFunction}
+                addNewCommentFunction={addNewCommentFunction}
+            />
+            <CommentList
+                article={article}
+                deleteCommentFunction={deleteCommentFunction}
+                userId={userId}
+            />
         </div>
-        
+    </div>
+</div>
     )
 }
 
 function mapStateToProps(state){
-    if(store.getState().authorFlag.authorFlag){
-        return{
-            login: state.user.login,
-            activePage: state.authorArticles.activePage,
-            authorFlag: state.authorFlag.authorFlag
-        }
-    } else{
-        return{
-            login: state.user.login,
-            activePage: state.articles.activePage,
-            authorFlag: state.authorFlag.authorFlag
-        }    
+    // authorFlag корректно обновляет страницу после добавления комментария
+    return{
+        login: state.user.login,
+        authorFlag: state.authorFlag.authorFlag,
+        activePage: store.getState().authorFlag.authorFlag
+            ? state.authorArticles.activePage
+            : state.articles.activePage
     }
 }
 
@@ -103,6 +87,9 @@ function mapDispatchToProps(dispatch){
         addNewComment: (article, login, comment) => dispatch( addNewComment(article, login, comment) ),
         changePage: (activePage) => dispatch( changePage(activePage) ),
         changePageAuthor: (activePage) => dispatch( changePageAuthor(activePage) ),
+        deleteComment: (commentIndex, articleId) => dispatch( deleteComment(commentIndex, articleId) ),
+        getAllAuthorArticles: (userId) => dispatch( getAllAuthorArticles(userId) ),
+
     }
 }
 

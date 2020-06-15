@@ -1,6 +1,7 @@
-import {GET_ALL_AUTHOR_ARTICLES, 
-    AUTHOR_FLAG_TRUE, 
-    CHANGE_PAGE_AUTHOR} from './actionTypes'
+import {GET_ALL_AUTHOR_ARTICLES,
+    AUTHOR_FLAG_TRUE,
+    CHANGE_PAGE_AUTHOR
+} from './actionTypes'
 import axios from 'axios'
 import {store} from '../index'
 
@@ -25,7 +26,7 @@ export function getAllAuthorArticles(authorId) {
     }
 }
 
-export function changePageAuthor(indexPage){
+export function changePageAuthor(indexPage) {
     return async dispatch =>{
         try{
             const data = {
@@ -34,13 +35,28 @@ export function changePageAuthor(indexPage){
             }
             await axios.post('/api/author/changepageauthor', data).then( res => {
                 dispatch({
-                    type: CHANGE_PAGE_AUTHOR,
-                    payload: res.data,
-                    activePage: indexPage
+                  type: CHANGE_PAGE_AUTHOR,
+                  payload: res.data,
+                  activePage: indexPage
                 })
             })
-            
+
         } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function deleteComment(commentIndex, articleId) {
+    return async dispatch => {
+        try {
+            const data = {
+                commentIndex,
+                articleId
+            }
+            await axios.post('/api/author/deletecomment', data)
+
+        } catch(e) {
             console.log(e)
         }
     }
