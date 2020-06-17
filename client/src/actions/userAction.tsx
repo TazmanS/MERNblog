@@ -103,3 +103,16 @@ export function userDelete(data){
         }
     }
 }
+
+export function userChangePassword(data) {
+    return async dispatch => {
+        try{
+            await axios.post('/api/user/changepassword', data).then(res => {
+                console.log(res.data)
+                return res.data
+            })
+        } catch(e){
+            console.log(e)
+        }
+    }
+}

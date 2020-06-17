@@ -108,4 +108,25 @@ router.post('/userdelete', async (req, res) => {
     }
 })
 
+router.post('/changepassword', async (req, res) => {
+    try{
+        await User.findById(req.body.userId).then(one => {
+            if (req.body.newPassword !== req.body.newPasswordAgain) {
+                return res.json("Новые пароли не совпадают")
+            } else if(req.body.oldPassword !== one.password) {
+                return res.json("Вы ввели не верный(старый) пароль")
+            } else {
+                let data = {
+                    password: req.body.newPassword
+                }
+                User.findByIdAndUpdate(req.body.userId, data).then(one => {
+                    return res.json("Пароль изменен")
+                })
+            }
+        })
+    } catch(e) {
+        console.log(e)
+    }
+})
+
 module.exports = router
