@@ -13,6 +13,7 @@ import Article from '../Article/Article'
 import RedactorArticle from '../RedactorArticle/RedactorArticle'
 import UserSettings from '../UserSettings/UserSettings'
 import UserDelete from '../UserSettings/UserDelete'
+import UserChangePass from '../UserSettings/UserChangePass'
 
 
 interface App {
@@ -47,6 +48,7 @@ const App:React.FC<App> = ({ getAllArticles, userEntranceLocalStorage, user }) =
               <Route path="/redactor" exact component={RedactorArticle} />
               <Route path="/settings" exact component={UserSettings} />
               <Route path="/deleteuser" exact component={UserDelete} />
+              <Route path="/changepassword" exact component={UserChangePass} />
             </Switch>
           </div>
           <div className="col-12 order-1 order-lg-2 col-lg-3 RnavBar">

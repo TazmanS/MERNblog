@@ -29,7 +29,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
     const loginChangeFunction = event => {
         setInputLogin(event.target.value)
 
-        if(event.target.value.length > 2 && event.target.value.length < 10){
+        if( verty(5, 16,event.target.value) ){
             setInputLoginClass('form-control is-valid')
         } else{
             setInputLoginClass('form-control is-invalid')
@@ -40,7 +40,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
     const passwordChangeFunction = event =>{
         setInputPassword(event.target.value)
 
-        if(event.target.value.length < 5 || event.target.value.length > 16){
+        if( verty(5,16,event.target.value) ){
             setInputPasswordClass('form-control is-invalid')
         } else{
             setInputPasswordClass('form-control is-valid')
@@ -66,10 +66,10 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
     const addNewUserFunction = async (event) => {
         event?.preventDefault()
 
-        const vertyCheck = verty(inputLogin, inputPassword, inputPasswordRepeat)
+        const vertyCheck = verty(5, 16, inputLogin, inputPassword, inputPasswordRepeat)
 
-        if(inputPassword.length < 5 && inputPassword.length > 16){
-            console.log("Не корректный пароль")
+        if( verty(5,16,inputPassword) ){
+            alert("Ошибка длины пароля")
             return false
         }
 
@@ -82,7 +82,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
             addNewUser(newUserData)
 
         } else{
-            console.error("Ошибка регистарции")
+            alert("Ошибка регистрации")
         }
 
         setInputLogin('')
@@ -94,7 +94,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
 <form>
     <h4>Регистация нового пользователя</h4>
     <div className="form-group">
-        <label htmlFor="regInputLogin">Login</label>
+        <label htmlFor="regInputLogin">Логин (5 - 16 символов) </label>
         <input type="login" className={inputLoginClass} id="regInputLogin" placeholder="Login"
         value={inputLogin}
         onChange={(event) => loginChangeFunction(event)} />
@@ -106,7 +106,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
         </div>
     </div>
     <div className="form-group">
-        <label htmlFor="regInputPass">Password (5 - 16 symbols)</label>
+        <label htmlFor="regInputPass">Пароль (5 - 16 символов)</label>
         <input type="password" className={inputPasswordClass} id="regInputPass" placeholder="Password"
         value={inputPassword}
         onChange={(event) => passwordChangeFunction(event) }

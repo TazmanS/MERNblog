@@ -1,12 +1,14 @@
-export const verty = (...string) => {
-    for(const str of string){
-        if (str.trim().length > 0){
-            return true
+export const verty = (min, max = 10000, ...string) => {
+    let arr = [...string]
+    for(const str of arr){
+        if (str.trim().length > 0 && str.length <= max && str.length >= min){
+            
         }
         else{
             return false
         }
     }
+    return true
 }
 
 

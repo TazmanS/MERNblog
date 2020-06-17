@@ -49,7 +49,7 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
 
     const hashTagArrayFunction = (event) => {
         event.preventDefault()
-        if(verty(hashTagChange)){
+        if(verty(1,16,hashTagChange)){
             let newArr:any = hashTagArray.concat()
             newArr.push(hashTagChange)
             setHashTagArray(newArr)
@@ -66,7 +66,7 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
 
     const addNewArticleFunction = async () =>{
         try{
-            const vertyChek = verty(titleChange, textChange)
+            const vertyChek = verty(5,undefined,titleChange, textChange)
             if(vertyChek && hashTagArray.length > 0){
                 let newArticleData = {
                     title: titleChange,
@@ -88,7 +88,7 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
                 history.push('/redactor')
 
             } else{
-                console.error("Введите коректные данные")
+                alert("Введите коректные данные")
                 setVertyInfo(false)
             }
         }catch (e){
