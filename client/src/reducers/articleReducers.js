@@ -1,6 +1,17 @@
 import {GET_ALL_ARTICLE} from '../actions/actionTypes'
 
-const initialState = []
+const initialState = {
+    article: {
+        comments: [],
+        _id: "",
+        title: "",
+        text: "",
+        date: "",
+        author: "",
+        authorId: '',
+        hashTag: [] 
+    }
+}
 
 const articleReducers = (state = initialState, action) => {
 

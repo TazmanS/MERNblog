@@ -4,13 +4,13 @@ import {combineReducers} from 'redux'
 import usersReducers from './usersReducers'
 import articlesReducers from './articlesReducers'
 import authorArticlesReducers from './authorArticlesReducers'
-import authorFlagReducers from './authorFlagReducers'
+import authorArticleReducers from './authorArticleReducers'
 
 const reducer = combineReducers({
     user: usersReducers,
     articles: articlesReducers,
     authorArticles: authorArticlesReducers,
-    authorFlag: authorFlagReducers
+    authorArticle: authorArticleReducers
 })
 
 export default reducer
