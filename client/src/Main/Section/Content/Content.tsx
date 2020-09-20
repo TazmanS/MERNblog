@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
-import Pagination from './Pagination'
+import Pagination from '../../../Components/Pagination'
 import {changePage} from '../../../actions/articles'
 import ContentBody from './ContentBody'
 import {ArticleInterface} from '../../../interfaces'

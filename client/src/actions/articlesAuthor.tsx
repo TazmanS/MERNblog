@@ -1,4 +1,4 @@
-import {GET_ALL_AUTHOR_ARTICLES, AUTHOR_FLAG_TRUE} from './actionTypes'
+import {GET_ALL_AUTHOR_ARTICLES} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -19,7 +19,7 @@ export function getAllAuthorArticles(authorId) {
                         payload: res.data
                     })
                 })
-                .then(() => dispatch({ type: AUTHOR_FLAG_TRUE}))
+                .then(() => dispatch({}))
         } catch (e){
             console.log(e)
         }

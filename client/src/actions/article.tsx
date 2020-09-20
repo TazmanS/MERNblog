@@ -1,4 +1,4 @@
-import {} from './actionTypes'
+import {GET_ONE_ARTICLE} from './actionTypes'
 import axios from 'axios'
 
 
@@ -15,6 +15,19 @@ export function addNewComment(article, login, comment){
 
 
         } catch(e){
+            console.log(e)
+        }
+    }
+}
+
+export function getOneArticle(article) {
+    return async dispatch => {
+        try {
+            dispatch({
+                type: GET_ONE_ARTICLE, 
+                payload: article
+            })
+        } catch(e) {
             console.log(e)
         }
     }

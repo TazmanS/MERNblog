@@ -1,4 +1,4 @@
-import {GET_ALL_ARTICLE} from '../actions/actionTypes'
+import {GET_ONE_ARTICLE} from '../actions/actionTypes'
 
 const initialState = {
     article: {
@@ -17,10 +17,11 @@ const articleReducers = (state = initialState, action) => {
 
 switch(action.type){
 
-    case GET_ALL_ARTICLE:
-        return [
-            ...action.payload.reverse()
-        ]
+    case GET_ONE_ARTICLE:
+        console.log(action.payload)
+        return {
+            article: {...action.payload}
+        }
 
     default: return state
 }

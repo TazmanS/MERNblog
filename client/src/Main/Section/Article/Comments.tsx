@@ -12,13 +12,8 @@ import {CommentsInterface} from '../../../interfaces'
 const Comments:React.FC<CommentsInterface> = ({
     article,
     login,
-    activePage,
-    authorFlag,
-    changePage,
-    changePageAuthor,
     deleteComment,
-    addNewComment,
-    getAllAuthorArticles }) => {
+    addNewComment }) => {
 
     const [comment, setComment] = useState('')
     const userId = localStorage.getItem('user')
@@ -37,11 +32,6 @@ const Comments:React.FC<CommentsInterface> = ({
         }
         await addNewComment(article, login, comment)
         setComment('')
-        if(authorFlag){
-            await changePageAuthor(activePage)
-        } else{
-            await changePage(activePage)
-        }
     }
 
     const deleteCommentFunction = async commentIndex => {
@@ -72,13 +62,8 @@ const Comments:React.FC<CommentsInterface> = ({
 }
 
 function mapStateToProps(state){
-    // authorFlag корректно обновляет страницу после добавления комментария
     return{
-        login: state.user.login,
-        authorFlag: state.authorFlag.authorFlag,
-        // activePage: store.getState().authorFlag.authorFlag
-        //     ? state.authorArticles.activePage
-        //     : state.articles.activePage
+        login: state.user.login
     }
 }
 

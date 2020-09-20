@@ -13,9 +13,9 @@ const initialState = {
             hashTag: []
         }
     ],
-    activePage: 0,
-    page: 0,
-    articlesNumber: 0
+    activePage: 0, //which page is activing now(pagination)
+    page: 0,    // total pages 
+    articlesNumber: 0 // total articles
 }
 
 const articlesReducers = (state = initialState, action) => {

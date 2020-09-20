@@ -1,7 +1,6 @@
 import axios from 'axios'
 import {GET_ALL_ARTICLES,
-    CHANGE_PAGE,
-    AUTHOR_FLAG_FALSE
+    CHANGE_PAGE
 } from './actionTypes'
 
 //отображение всех статьей не а разделе автора + пагинация
@@ -18,9 +17,7 @@ export function getAllArticles(){
                     })
                 })
                 .then(() => {
-                    dispatch({
-                        type: AUTHOR_FLAG_FALSE
-                    })
+                    dispatch({})
                 })
         } catch(e){
             console.log(e)

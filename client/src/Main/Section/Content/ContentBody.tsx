@@ -1,11 +1,19 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {getOneArticle} from '../../../actions/article'
+import {connect} from 'react-redux'
 
 interface ContentBody {
-    articles: [any]
+    articles: [any],
+    getOneArticle(article) :void
 }
 
-const ContentBody:React.FC<ContentBody> = ({articles}) => {
+const ContentBody:React.FC<ContentBody> = ({articles, getOneArticle}) => {
+
+    const getOneArticleFunction = (article) => {
+        getOneArticle(article)
+    } 
+
     const body = articles.map((one, index) => {
         let shortText = one.text.slice(0,100)
         return(
@@ -17,10 +25,9 @@ const ContentBody:React.FC<ContentBody> = ({articles}) => {
                     <h2 className="post-title">{one.title}</h2>
                     <p>{shortText}</p>
                     <div className="post-footer">
-                        <Link className="more-link" to={{
-                            pathname: "/article",
-                            index: index
-                        }}>Продолжить чтение</Link>
+                        <Link className="more-link" to="/article"
+                            onClick={() => getOneArticleFunction(one) }
+                        >Продолжить чтение</Link>
                     </div>
                     <p>Автор: {one.author} - {one.date}
                         <small> (Коментов - {one.comments.length}) </small>
@@ -40,4 +47,10 @@ const ContentBody:React.FC<ContentBody> = ({articles}) => {
     )
 }
 
-export default ContentBody
+function mapDispatchToProps(dispatch) {
+    return {
+        getOneArticle: (article) => dispatch( getOneArticle(article) )
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ContentBody)
