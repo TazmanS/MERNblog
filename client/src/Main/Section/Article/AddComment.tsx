@@ -1,15 +1,39 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
+
+import {addNewComment} from '../../../actions/article'
+
 
 interface AddComment {
-    comment: any,
-    commentFunction(event) :void,
-    addNewCommentFunction() :void
+    login: string,
+    article: object,
+    addNewComment(article, login, comment): void
 }
 
-const AddComment:React.FC<AddComment> = ({
-    comment,
-    commentFunction,
-    addNewCommentFunction}):any => {
+const AddComment:React.FC<AddComment> = ({login, article, addNewComment}):any => {
+
+    const [comment, setComment] = useState('')
+
+    const commentFunction = event => {
+        if(event.target.value.length <= 150) {
+            setComment(event.target.value)
+        } else {
+            setComment(comment)
+        }
+    }
+
+    const addNewCommentFunction = async () => {
+        if(!login.trim()){
+            login = "Гость"
+        }
+        if(comment.trim()){
+            await addNewComment(article, login, comment)
+            setComment('')    
+        } else {
+            alert("Введите Ваш коментарий")
+        }
+    }
+
     return (
         <React.Fragment>
             <label htmlFor="comments">Коментарии</label>
@@ -29,4 +53,16 @@ const AddComment:React.FC<AddComment> = ({
     )
 }
 
-export default AddComment
+function mapStateToProps(state){
+    return{
+        login: state.user.login,
+        article: state.article.article
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        addNewComment: (article, login, comment) => dispatch( addNewComment(article, login, comment) )    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(AddComment)

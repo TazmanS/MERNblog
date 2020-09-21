@@ -17,7 +17,7 @@ export function getAllArticles(){
                     })
                 })
                 .then(() => {
-                    dispatch({})
+                    //dispatch({})
                 })
         } catch(e){
             console.log(e)

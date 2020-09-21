@@ -18,7 +18,6 @@ const articleReducers = (state = initialState, action) => {
 switch(action.type){
 
     case GET_ONE_ARTICLE:
-        console.log(action.payload)
         return {
             article: {...action.payload}
         }

@@ -8,12 +8,17 @@ export function addNewComment(article, login, comment){
     return async dispatch => {
         try{
             let data = {
-                id: article._id, login, comment
+                id: article._id, 
+                login, 
+                comment
             }
-
             await axios.post('/api/article/addnewcomment', data)
-
-
+                .then((res) => {
+                    dispatch({
+                        type: GET_ONE_ARTICLE,
+                        payload: res.data
+                    })
+                })
         } catch(e){
             console.log(e)
         }

@@ -26,18 +26,6 @@ export interface AddArticle {
     updateArticle(newArticleData: NewArticle, articleId: String) : any
 }
 
-export interface CommentsInterface {
-    article: any,
-    login: String,
-    activePage: Number,
-    authorFlag: Boolean,
-    changePage(activePage) :void,
-    changePageAuthor(activePage) :void,
-    addNewComment(article, login, comment) :void
-    deleteComment(commentIndex, articleId) :void,
-    getAllAuthorArticles(userId) :void
-}
-
 export interface ArticleInterface {
     articles: [{
         title: String,

@@ -1,32 +1,40 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {deleteComment} from '../../../actions/articleAuthor'
+
 
 interface CommentList {
-    userId: any,
     article: any,
-    deleteCommentFunction(index) :void
+    deleteComment(commentIndex, articleId) :void,
+    userId: string
 }
 
 const CommentList:React.FC<CommentList> = ({
-    userId,
     article,
-    deleteCommentFunction }):any => {
+    deleteComment,
+    userId }):any => {
+
+        
+    const deleteCommentFunction = async commentIndex => {
+        await deleteComment(commentIndex, article._id)
+    }
 
 
-    const commentList = article.comments.map((one, index) => {
-        return(
-            <div key={index} className="commentList">
-                <p>
-                    <small>{index + 1}. {one.login}</small> - {one.comment}
-                </p>
-                { userId === article.authorId
-                    ?   <button className="btn btn-danger btn-sm"
-                            onClick={() => deleteCommentFunction(index)}
-                        >Delete</button>
-                    :   null }
+const commentList = article.comments.map((one, index) => {
+    return(
+        <div key={index} className="commentList">
+            <p>
+                <small>{index + 1}. {one.login}</small> - {one.comment}
+            </p>
+            { userId === article.authorId
+                ?   <button className="btn btn-danger btn-sm"
+                        onClick={() => deleteCommentFunction(index)}
+                    >Delete</button>
+                :   null }
 
-            </div>
-        )
-    })
+        </div>
+    )
+})
 
     return (
         <React.Fragment>
@@ -35,4 +43,17 @@ const CommentList:React.FC<CommentList> = ({
     )
 }
 
-export default CommentList
+function mapStateToProps(state) {
+    return {
+        userId: state.user.id,
+        article: state.article.article
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        deleteComment: (commentIndex, articleId) => dispatch( deleteComment(commentIndex, articleId) )
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(CommentList)

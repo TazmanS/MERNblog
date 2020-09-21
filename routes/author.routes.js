@@ -36,7 +36,7 @@ router.post('/changepageauthor', async (req, res) => {
 
 router.post('/deletecomment', async (req, res) => {
     try {
-        await Article.findById(req.body.articleId).then(one => {
+        await Article.findById(req.body.articleId).then( async one => {
             const newComments = one.comments.concat()
             newComments.splice(req.body.commentIndex, 1)
 
@@ -44,9 +44,10 @@ router.post('/deletecomment', async (req, res) => {
                 comments: [...newComments]
             }
             
-            Article.findByIdAndUpdate(req.body.articleId, article).then(() => {
-                return res.status(200).json(one) 
-            })
+            await Article.findByIdAndUpdate(req.body.articleId, article)
+        })
+        await Article.findById(req.body.articleId).then(one => {
+            return res.status(200).json(one)  
         })
     } catch(e) {
         console.log(e)

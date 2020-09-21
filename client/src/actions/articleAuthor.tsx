@@ -1,4 +1,4 @@
-import {} from './actionTypes'
+import {GET_ONE_ARTICLE} from './actionTypes'
 import axios from 'axios'
 
 
@@ -27,7 +27,12 @@ export function deleteComment(commentIndex, articleId) {
                 commentIndex,
                 articleId
             }
-            await axios.post('/api/author/deletecomment', data)
+            await axios.post('/api/author/deletecomment', data).then( res => {
+                dispatch({
+                    type: GET_ONE_ARTICLE, 
+                    payload: res.data
+                })
+            })
 
         } catch(e) {
             console.log(e)

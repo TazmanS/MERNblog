@@ -15,8 +15,12 @@ interface Article {
 const Article:React.FC<Article> = ({ history, article, deleteArticle, getAllArticles }) => {
 
     useEffect(() => {
-        document.title = article.title
-    }, [article])
+        if(article._id){
+            document.title = article.title    
+        } else {
+            history.push('/')
+        }
+    }, [article,history])
 
     const deleteArticleFunction = async () => {
         await deleteArticle(article._id)
@@ -44,7 +48,7 @@ const Article:React.FC<Article> = ({ history, article, deleteArticle, getAllArti
                     >Удалить статью</button>
                 : null
             }
-            <Comments article={article} />
+            <Comments />
         </div>
     </div>
 </div>
