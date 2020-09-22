@@ -2,18 +2,24 @@ import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {addNewArticle} from '../../../actions/articlesAuthor'
 import {updateArticle} from '../../../actions/articleAuthor'
-import {getAllArticles} from '../../../actions/articles'
 import {verty} from '../../../hooks/verty.hooks'
-import {withRouter} from 'react-router-dom'
 import ContentForm from './ContentForm'
-import {AddArticle} from '../../../interfaces'
+
+export interface AddArticle {
+    addNewArticle(newArticleData: any) : any,
+    history: any,
+    user: any,
+    updateArticle(newArticleData: any, articleId: String) : any,
+    addOUA: any
+}
+
 
 
 const AddContent:React.FC<AddArticle> = ({addNewArticle,
     history,
     user,
-    getAllArticles,
-    updateArticle}) =>{
+    updateArticle,
+    addOUA}) =>{
 
     const [titleChange, setTitleChange] = useState<string>('')
     const [textChange, setTextChange] = useState<string>('')
@@ -22,16 +28,21 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
     const [hashTagArray, setHashTagArray] = useState([])
 
     useEffect(() => {
-        if(history.location.article){
-            setTitleChange(history.location.article.title)
-            setTextChange(history.location.article.text)
-            setHashTagArray(history.location.article.hashTag)
-            setVertyInfo(true)
+        if(addOUA.title.trim()){
+            setValuesFunction(addOUA)
             document.title = "Redactor article"
         } else{
+            setValuesFunction(undefined)
             document.title = "Add article"
         }
-    }, [history.location.article])
+    }, [addOUA])
+
+    const setValuesFunction = (value) => {
+        setTitleChange(value?.title || '')
+        setTextChange(value?.text || '')
+        setHashTagArray(value?.hashTag || [])
+        setVertyInfo(true)
+    }
 
     const titleChangeFunction = event =>{
         setTitleChange(event.target.value)
@@ -77,10 +88,10 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
                     author: user.login,
                     authorId: user.id
                 }
-                if(history.location.article){
-                    await updateArticle(newArticleData, history.location.article._id )
+                if(addOUA.title.trim()){
+                    await updateArticle(newArticleData, addOUA._id )
                 } else{
-                    await addNewArticle(newArticleData).then(() => getAllArticles())
+                    await addNewArticle(newArticleData)
                 }
 
                 setTitleChange('')
@@ -118,24 +129,24 @@ const AddContent:React.FC<AddArticle> = ({addNewArticle,
             hashTagArrayFunction={hashTagArrayFunction}
             hashTagBody={hashTagBody}
             addNewArticleFunction={addNewArticleFunction}
-            history={history}
             vertyInfo={vertyInfo}
+            addOUA={addOUA}
         />
     )
 }
 
 function mapStateToProps(state){
     return{
-        user: state.user
+        user: state.user,
+        addOUA: state.addOrUpdate.article //addOrUpdateArticle
     }
 }
 
 function mapDispatchToProps(dispatch){
     return{
         addNewArticle: newArticleData => dispatch( addNewArticle(newArticleData) ),
-        getAllArticles: () => dispatch( getAllArticles() ),
         updateArticle: (newArticleData, articleId) => dispatch( updateArticle(newArticleData, articleId) )
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddContent))
+export default connect(mapStateToProps, mapDispatchToProps)(AddContent)

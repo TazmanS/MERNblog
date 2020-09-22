@@ -6,13 +6,15 @@ import articlesReducers from './articlesReducers'
 import articleReducers from './articleReducers'
 import authorArticlesReducers from './authorArticlesReducers'
 import authorArticleReducers from './authorArticleReducers'
+import addOrUpdateArticle from './addOrUpdateArticle'
 
 const reducer = combineReducers({
     user: usersReducers,
     articles: articlesReducers,
     article: articleReducers,
     authorArticles: authorArticlesReducers,
-    authorArticle: authorArticleReducers
+    authorArticle: authorArticleReducers,
+    addOrUpdate: addOrUpdateArticle
 })
 
 export default reducer

@@ -3,13 +3,13 @@ export interface ContentFormInterface {
     textChange: string,
     hashTagChange: string,
     hashTagBody: any,
-    history: any,
     vertyInfo: boolean
     titleChangeFunction(event) :void,
     textChangeFunction(event): void,
     hashTagFunction(event): void,
     hashTagArrayFunction(event): void,
     addNewArticleFunction(): void,
+    addOUA: any
 }
 
 export interface NewArticle {
@@ -18,13 +18,6 @@ export interface NewArticle {
     hashTag: Array<any>
 }
 
-export interface AddArticle {
-    addNewArticle(newArticleData: NewArticle) : any,
-    history: any,
-    user: any,
-    getAllArticles(): void,
-    updateArticle(newArticleData: NewArticle, articleId: String) : any
-}
 
 export interface ArticleInterface {
     articles: [{
@@ -50,5 +43,7 @@ export interface RedactorArticleInterface {
     getAllArticles() :void,
     changePageAuthor(indexPage): void,
     page: Number,
-    activePage: Number
+    activePage: Number,
+    getOneArticle(article): void,
+    setUpdateArticle(article): void
 }

@@ -1,24 +1,28 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {getAllAuthorArticles} from '../../../actions/articlesAuthor' 
-import {getAllArticles} from '../../../actions/articles'
 import {deleteArticle} from '../../../actions/articlesAuthor'
 import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 import Pagination from '../../../Components/Pagination'
 import {changePageAuthor} from '../../../actions/articlesAuthor'
 import {RedactorArticleInterface} from '../../../interfaces'
+import {getOneArticle} from '../../../actions/article'
+import { setUpdateArticle } from '../../../actions/articleAuthor'
+import { getAllArticles } from '../../../actions/articles'
 
 const RedactorArticle:React.FC<RedactorArticleInterface> = ({
     getAllAuthorArticles,
     user,
     history,
     deleteArticle,
-    getAllArticles,
     authorArticles,
     changePageAuthor,
     page,
-    activePage }) => {
+    activePage,
+    getOneArticle,
+    setUpdateArticle,
+    getAllArticles }) => {
 
     useEffect(() => {
         let local = localStorage.getItem("user")
@@ -27,14 +31,23 @@ const RedactorArticle:React.FC<RedactorArticleInterface> = ({
         }
         document.title = "My articles"
         getAllAuthorArticles(user.id || local)
+        getAllArticles()
     }, [getAllAuthorArticles, user.id, history])
+
+    const authorArticleFunction = (article) => {
+        getOneArticle(article)
+    }
+
+    const authorUpdateFunction = (article) => {
+        setUpdateArticle(article)
+    }
 
     const deleteArticleFunction = async (articleId) => {
         await deleteArticle(articleId)
 
         let authorId = localStorage.getItem('user')
-        await getAllArticles()
         await getAllAuthorArticles(authorId)
+        await getAllArticles()
     }
 
     const body = authorArticles.map((one, index) => {
@@ -43,14 +56,14 @@ const RedactorArticle:React.FC<RedactorArticleInterface> = ({
                 <h3>{one.title}</h3>
                 <p>Автор - {one.author}</p>
                 <p>Дата написания - {one.date} / Коментов - {one.comments.length}</p>
-                <Link className="btn btn-sm btn-success" to={{
-                                    pathname: "/article",
-                                    index: index
-                                }}>Просмотреть статью</Link>
-                <Link className="btn btn-sm btn-success" to={{
-                                    pathname: "/add",
-                                    article: one
-                                }}>Редактировать статью</Link>
+                <Link className="btn btn-sm btn-success" 
+                    to="/article" 
+                    onClick={() => authorArticleFunction(one)}
+                    >Просмотреть статью</Link>
+                <Link className="btn btn-sm btn-success"
+                    to="/add"
+                    onClick={() => authorUpdateFunction(one)}
+                    >Редактировать статью</Link>
                 <button className="btn btn-sm btn-danger"
                     onClick={ () => deleteArticleFunction(one._id)}
                 >Удалить статью</button>
@@ -86,7 +99,9 @@ function mapDispatchToProps(dispatch){
         getAllAuthorArticles: userId => dispatch( getAllAuthorArticles(userId) ),
         deleteArticle: articleId => dispatch( deleteArticle(articleId) ),
         changePageAuthor: indexPage => dispatch( changePageAuthor(indexPage) ),
-        getAllArticles: () => dispatch( getAllArticles() ),
+        getOneArticle: (article) => dispatch( getOneArticle(article) ),
+        setUpdateArticle: (article) => dispatch( setUpdateArticle(article) ),
+        getAllArticles: () => dispatch( getAllArticles() )
     }
 }
 

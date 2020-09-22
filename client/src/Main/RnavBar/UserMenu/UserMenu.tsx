@@ -3,15 +3,17 @@ import {connect} from 'react-redux'
 import {userExit} from '../../../actions/user'
 import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
+import {cleanUpdateArticleForm} from '../../../actions/articleAuthor'
 
 
 interface UserMenu {
     user: any,
     userExit(): void,
-    history: any
+    history: any,
+    cleanUpdateArticleForm(): void
 }
 
-const UserMenu:React.FC<UserMenu> = ({user, userExit, history}) => {
+const UserMenu:React.FC<UserMenu> = ({user, userExit, history, cleanUpdateArticleForm}) => {
     return(
         <div>
             <div>
@@ -20,7 +22,10 @@ const UserMenu:React.FC<UserMenu> = ({user, userExit, history}) => {
                     userExit() }}
                     >Exit</span>      
             </div>
-            <Link className="navbar-brand" to="/add">Добавить статью </Link>
+            <Link className="navbar-brand"
+                to="/add"
+                onClick={() => cleanUpdateArticleForm()}
+            >Добавить статью </Link>
             <Link className="navbar-brand" to="/redactor">Список моих работ </Link>
             <Link className="navbar-brand" to="/settings">Настройки профиля </Link>
         </div>
@@ -35,7 +40,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return{
-        userExit: () => dispatch( userExit() )
+        userExit: () => dispatch( userExit() ),
+        cleanUpdateArticleForm: () => dispatch( cleanUpdateArticleForm() )
     }
 }
 

@@ -13,8 +13,8 @@ const ContentForm:React.FC<ContentFormInterface> = ({
     hashTagArrayFunction,
     hashTagBody,
     addNewArticleFunction,
-    history,
-    vertyInfo }) => {
+    vertyInfo,
+    addOUA }) => {
     return(
 <form>
     <div className="form-group">
@@ -64,7 +64,7 @@ const ContentForm:React.FC<ContentFormInterface> = ({
     <button className="btn btn-primary" onClick={async (event) =>{
         event?.preventDefault()
         addNewArticleFunction()
-    }}>{history.location.article
+    }}>{addOUA.title.trim()
         ? "Редактировать"
         : "Добавить"}</button>
     <span>

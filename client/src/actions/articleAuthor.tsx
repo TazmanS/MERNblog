@@ -1,4 +1,6 @@
-import {GET_ONE_ARTICLE} from './actionTypes'
+import {GET_ONE_ARTICLE,
+        SET_UPDATE_ARTICLE,
+        CLEAN_UPDATE_ARTICLE_FORM} from './actionTypes'
 import axios from 'axios'
 
 
@@ -37,5 +39,22 @@ export function deleteComment(commentIndex, articleId) {
         } catch(e) {
             console.log(e)
         }
+    }
+}
+
+export const setUpdateArticle = (article) => {
+    return dispatch => {
+        dispatch({
+            type: SET_UPDATE_ARTICLE,
+            payload: article
+        })
+    }
+}
+
+export const cleanUpdateArticleForm = () => {
+    return dispatch => {
+        dispatch({
+            type: CLEAN_UPDATE_ARTICLE_FORM
+        })
     }
 }

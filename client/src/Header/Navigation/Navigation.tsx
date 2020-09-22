@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {getAllArticles} from '../../actions/articles'
 import {connect} from 'react-redux'
@@ -10,6 +10,10 @@ interface GetAll {
 }
 
 const Navigation:React.FC<GetAll> = ({getAllArticles, user, articles}) => {
+
+    useEffect(() => {
+
+    }, [articles])
 
     return(
         <nav className="navbar 
