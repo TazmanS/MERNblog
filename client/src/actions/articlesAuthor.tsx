@@ -1,12 +1,13 @@
-import {GET_ALL_AUTHOR_ARTICLES} from './actionTypes'
+import {GET_ALL_AUTHOR_ARTICLES,
+    CHANGE_PAGE_AUTHOR} from './actionTypes'
 import axios from 'axios'
 import moment from 'moment'
+import { getAllArticles } from './articles'
 
 //отображение всех статьей в разделе автора + пагинация
 
 
 export function getAllAuthorArticles(authorId) {
-
     return async dispatch => {
         try{
             const data = {
@@ -19,21 +20,24 @@ export function getAllAuthorArticles(authorId) {
                         payload: res.data
                     })
                 })
-                .then(() => dispatch({}))
+                //.then(() => dispatch({}))
         } catch (e){
             console.log(e)
         }
     }
 }
 
-export function changePageAuthor(indexPage) {
+export function changePageAuthor(indexPage, authorId) {
+    console.log(indexPage, authorId)
     return async dispatch =>{
         try{
             const data = {
-                indexPage: indexPage,
+                indexPage,
+                authorId
             }
             await axios.post('/api/author/changepageauthor', data).then( res => {
                 dispatch({
+                  type: CHANGE_PAGE_AUTHOR,
                   payload: res.data,
                   activePage: indexPage
                 })
@@ -53,6 +57,7 @@ export function addNewArticle(newArticleData){
             const data = {...newArticleData, date}
 
             await axios.post('/api/article/add', data).then(() => {
+                dispatch( getAllArticles() )
                 console.log("Article add React")
             })
         } catch(e){
@@ -61,15 +66,14 @@ export function addNewArticle(newArticleData){
     }
 }
 
-export function deleteArticle(articleId){
+export function deleteArticle(articleId, authorId){
     return async dispatch => {
         try{
             const data = {
                 articleId: articleId
             }
-            await axios.post('/api/article/delete', data).then(res =>{
-
-            })
+            await axios.post('/api/article/delete', data)
+            dispatch( getAllAuthorArticles(authorId) )
         } catch(e){
             console.log(e)
         }

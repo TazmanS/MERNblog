@@ -28,7 +28,8 @@ switch(action.type){
             ...state,
             articles: [...action.payload.tenArticles],
             articlesNumber: action.payload.articlesNumber,
-            page: Math.ceil(action.payload.articlesNumber/10)
+            page: Math.ceil(action.payload.articlesNumber/10),
+            activePage: 0
         }
     case CHANGE_PAGE_AUTHOR:
         return{

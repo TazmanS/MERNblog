@@ -9,7 +9,6 @@ import {changePageAuthor} from '../../../actions/articlesAuthor'
 import {RedactorArticleInterface} from '../../../interfaces'
 import {getOneArticle} from '../../../actions/article'
 import { setUpdateArticle } from '../../../actions/articleAuthor'
-import { getAllArticles } from '../../../actions/articles'
 
 const RedactorArticle:React.FC<RedactorArticleInterface> = ({
     getAllAuthorArticles,
@@ -21,8 +20,7 @@ const RedactorArticle:React.FC<RedactorArticleInterface> = ({
     page,
     activePage,
     getOneArticle,
-    setUpdateArticle,
-    getAllArticles }) => {
+    setUpdateArticle }) => {
 
     useEffect(() => {
         let local = localStorage.getItem("user")
@@ -31,7 +29,6 @@ const RedactorArticle:React.FC<RedactorArticleInterface> = ({
         }
         document.title = "My articles"
         getAllAuthorArticles(user.id || local)
-        getAllArticles()
     }, [getAllAuthorArticles, user.id, history])
 
     const authorArticleFunction = (article) => {
@@ -43,11 +40,7 @@ const RedactorArticle:React.FC<RedactorArticleInterface> = ({
     }
 
     const deleteArticleFunction = async (articleId) => {
-        await deleteArticle(articleId)
-
-        let authorId = localStorage.getItem('user')
-        await getAllAuthorArticles(authorId)
-        await getAllArticles()
+        await deleteArticle(articleId, user.id)
     }
 
     const body = authorArticles.map((one, index) => {
@@ -80,7 +73,8 @@ const RedactorArticle:React.FC<RedactorArticleInterface> = ({
             }
             <Pagination page={page}
                         activePage={activePage}
-                        changeFunction={changePageAuthor}/>
+                        changeFunction={changePageAuthor}
+                        userId={user.id} />
         </div>
     )
 }
@@ -89,7 +83,7 @@ function mapStateToProps(state){
     return{
         user: state.user,
         authorArticles: state.authorArticles.articles,
-        page: state.authorArticles.page,
+        page: state.authorArticles.page, 
         activePage: state.authorArticles.activePage,
     }
 }
@@ -97,11 +91,10 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return{
         getAllAuthorArticles: userId => dispatch( getAllAuthorArticles(userId) ),
-        deleteArticle: articleId => dispatch( deleteArticle(articleId) ),
-        changePageAuthor: indexPage => dispatch( changePageAuthor(indexPage) ),
+        deleteArticle: (articleId, userId) => dispatch( deleteArticle(articleId, userId) ),
+        changePageAuthor: (indexPage, userId) => dispatch( changePageAuthor(indexPage, userId) ),
         getOneArticle: (article) => dispatch( getOneArticle(article) ),
         setUpdateArticle: (article) => dispatch( setUpdateArticle(article) ),
-        getAllArticles: () => dispatch( getAllArticles() )
     }
 }
 

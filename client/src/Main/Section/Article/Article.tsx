@@ -1,32 +1,21 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
-import {userExit} from '../../../actions/user'
 import Comments from './Comments'
-import {getAllArticles} from '../../../actions/articles'
-import {deleteArticle} from '../../../actions/articlesAuthor'
 
 interface Article {
     history: any,
     article: any,
-    deleteArticle(articleId): void,
-    getAllArticles(): void
 }
 
-const Article:React.FC<Article> = ({ history, article, deleteArticle, getAllArticles }) => {
+const Article:React.FC<Article> = ({ history, article }) => {
 
     useEffect(() => {
         if(article._id){
-            document.title = article.title    
+            document.title = article.title || "Title"   
         } else {
             history.push('/')
         }
     }, [article,history])
-
-    const deleteArticleFunction = async () => {
-        await deleteArticle(article._id)
-        await getAllArticles()
-        await history.push('/')
-    }
 
     return(
 <div>
@@ -42,12 +31,6 @@ const Article:React.FC<Article> = ({ history, article, deleteArticle, getAllArti
                     <div>Хэдштег: #{article.hashTag.join(" #")}</div>
                 </div>
             </article>
-            {article.author === "Автор удален"
-                ? <button className="btn btn-danger btn-sm"
-                    onClick={deleteArticleFunction}
-                    >Удалить статью</button>
-                : null
-            }
             <Comments />
         </div>
     </div>
@@ -61,12 +44,5 @@ function mapStateToProps(state){
     }
 }
 
-function mapDispatchToProps(dispatch){
-    return{
-        userExit: () => dispatch( userExit() ),
-        deleteArticle: articleId => dispatch( deleteArticle(articleId) ),
-        getAllArticles: () => dispatch( getAllArticles() )
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article)
+export default connect(mapStateToProps)(Article)

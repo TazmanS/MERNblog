@@ -4,13 +4,16 @@ import {Link} from 'react-router-dom'
 interface Pagination {
     activePage: Number,
     page: Number,
-    changeFunction(index) :void,
+    changeFunction(index, userId) :void,
+    userId: any
 }
 
-const Pagination:React.FC<Pagination> = ({page, 
+const Pagination:React.FC<Pagination> = ({
+    page, 
     activePage = 0,
-    changeFunction}) =>{
-        
+    changeFunction,
+    userId = null}) =>{
+
     const [pagination, setPagination] = useState<number[]>([])
 
     useEffect(() => {
@@ -26,7 +29,7 @@ const Pagination:React.FC<Pagination> = ({page,
     }, [page])
 
     const changePageFunction = (index) => {
-        changeFunction(index)
+        changeFunction(index, userId)
     }
 
     const paginationMenu = pagination.map((one, index) => {
@@ -47,7 +50,10 @@ const Pagination:React.FC<Pagination> = ({page,
         <div>
             <nav aria-label="Page navigation example">
                 <ul className="pagination">
-                    {paginationMenu}
+                    {page > 1
+                    ? paginationMenu
+                    : null
+                    }
                 </ul>
             </nav>    
         </div>

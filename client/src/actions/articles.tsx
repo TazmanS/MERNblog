@@ -25,7 +25,7 @@ export function getAllArticles(){
     }
 }
 
-export function changePage(indexPage){
+export function changePage(indexPage, userId){
     return async dispatch =>{
         try{
 

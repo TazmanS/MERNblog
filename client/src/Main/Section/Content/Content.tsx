@@ -18,7 +18,8 @@ const Content:React.FC<ArticleInterface> = ({ articles, page, activePage, change
                 : <p>В базе пусто</p>}</div>
             <Pagination page={page}
                         activePage={activePage}
-                        changeFunction={changePage}/>
+                        changeFunction={changePage}
+                        userId={null}/>
         </React.Fragment>
 
     )
@@ -34,7 +35,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return{
-        changePage: indexPage => dispatch( changePage(indexPage) ),
+        changePage: (indexPage, userId)=> dispatch( changePage(indexPage, userId) ),
     }
 }
 

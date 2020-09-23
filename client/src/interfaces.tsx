@@ -31,7 +31,7 @@ export interface ArticleInterface {
     }],
     page: Number,
     activePage: Number,
-    changePage(indexPage) :void
+    changePage(indexPage, userId) :void
 }
 
 export interface RedactorArticleInterface {
@@ -39,9 +39,8 @@ export interface RedactorArticleInterface {
     user: any,
     authorArticles: any,
     history: any,
-    deleteArticle(articleId) :void,
-    getAllArticles() :void,
-    changePageAuthor(indexPage): void,
+    deleteArticle(articleId, userId) :void,
+    changePageAuthor(indexPage, userId): void,
     page: Number,
     activePage: Number,
     getOneArticle(article): void,
