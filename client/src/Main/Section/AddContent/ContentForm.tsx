@@ -18,9 +18,9 @@ const ContentForm:React.FC<ContentFormInterface> = ({
     return(
 <form>
     <div className="form-group">
-        <label htmlFor="title">Название статьи</label>
+        <label htmlFor="title">Название статьи(5 - 250)</label>
         <input type="text"
-            className={verty(titleChange)
+            className={verty(5,250,titleChange)
                 ? "form-control active-border-green"
                 : "form-control active-border-red"}
             id="title"
@@ -32,7 +32,7 @@ const ContentForm:React.FC<ContentFormInterface> = ({
     <div className="form-group">
         <label htmlFor="text">Текст статьи</label>
         <textarea
-            className={verty(textChange)
+            className={verty(5,3000,textChange)
                 ? "form-control active-border-green"
                 : "form-control active-border-red"}
             id="text"

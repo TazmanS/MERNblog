@@ -21,7 +21,6 @@ const UserDelete:React.FC<UserDelete> = ({userDelete, user, history, getAllArtic
     }, [user.login, history])
 
     const [userPassword, setUserPassword] = useState('')
-    const [leaveArticles, setLeaveArticles] = useState(false)
 
     const userPasswordFunction = event =>{
         setUserPassword(event.target.value)
@@ -31,7 +30,6 @@ const UserDelete:React.FC<UserDelete> = ({userDelete, user, history, getAllArtic
 
         let data = {
             userPassword: userPassword,
-            leaveArticles: leaveArticles,
             userId: user.id,
             login: user.login
         }
@@ -44,13 +42,6 @@ const UserDelete:React.FC<UserDelete> = ({userDelete, user, history, getAllArtic
     return(
         <div>
             <h3>Удаление пользователя</h3>
-            <div className="form-check">
-                <input type="checkbox" className="form-check-input" id="leaveArticle"
-                    onChange={() => setLeaveArticles(!leaveArticles)}
-                />
-                <label className="form-check-label" htmlFor="leaveArticle">Оставить статьи?</label>
-            </div>
-            < hr />
             <div className="form-group">
                     <label htmlFor="passwordUser">Введите Ваш пароль</label>
                         <div className="hashtagInput">

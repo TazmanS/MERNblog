@@ -81,24 +81,12 @@ router.post('/userdelete', async (req, res) => {
             }
         })
 
-        if(req.body.leaveArticles){
-            await Article.find({authorId: req.body.userId}).then(data => {
-                data.forEach(async one => {
-                    let dataForUpdate = {
-                        author: "Автор удален",
-                        authorId: null
-                    }
-                    await Article.findByIdAndUpdate(one._id, dataForUpdate)
-                })
+        await Article.find({authorId: req.body.userId}).then(data => {
+            data.forEach(async one => {
+                await Article.findByIdAndDelete(one._id)
             })
-        } else{
-            await Article.find({authorId: req.body.userId}).then(data => {
-                data.forEach(async one => {
-                    await Article.findByIdAndDelete(one._id)
-                })
-            })
-        }
-
+        })
+        
         await User.findOneAndDelete({password: req.body.userPassword}).then(() =>{
             return res.status(200).json('Пользователь удален')
         })

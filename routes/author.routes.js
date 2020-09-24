@@ -21,7 +21,6 @@ router.post('/all', async(req, res) => {
 
 router.post('/changepageauthor', async (req, res) => {
     try{
-        console.log(req.body)
         await Article.find({authorId: req.body.authorId}).then( articles => {
             let indexPage = req.body.indexPage * 10
             const data = {

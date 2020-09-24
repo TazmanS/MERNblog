@@ -18,6 +18,7 @@ export function addNewUser(newUserData) {
                     id: res.data.id
                 })
             })
+            return { message: "Add new add"}
         } catch(e){
             console.error("Ошибка создания пользователя", e)
         }
@@ -85,7 +86,6 @@ export function userExit(){
 export function userDelete(data){
     return async dispatch => {
         try{
-            console.log(data)
             await axios.post('/api/user/userdelete', data).then((data) => {
                 if(data.status === 201){
                     console.log(data.data)

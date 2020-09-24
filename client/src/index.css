@@ -197,3 +197,12 @@ code {
     word-wrap: break-word;
     width: 80%;
 }
+
+.modalWindow{
+  position: absolute;
+  top: 10%;
+  left: 25%;
+  width: 50%;
+  height: 25%;
+  background-color: tomato;
+}

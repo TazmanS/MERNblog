@@ -3,9 +3,11 @@ import {connect} from 'react-redux'
 import {verty} from '../../../hooks/verty.hooks'
 import {addNewUser} from '../../../actions/user'
 import {withRouter} from 'react-router-dom'
+import InputGroupItem from './InputGroupItem'
+import ModalWindow from '../../../Components/ModalWindow'
 
 interface Reg {
-    addNewUser(newUserData) :void,
+    addNewUser(newUserData) :any,
     user: any,
     history: any
 }
@@ -20,31 +22,18 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
     }, [user.login, history])
 
     const [inputLogin, setInputLogin] = useState('')
-    const [inputLoginClass, setInputLoginClass] = useState('form-control')
     const [inputPassword, setInputPassword] = useState('')
-    const [inputPasswordClass, setInputPasswordClass] = useState('form-control')
     const [inputPasswordRepeat, setInputPasswordRepeat] = useState('')
     const [checkPass, setCheckPass] = useState(true)
+    const [modalWindow, setModalWindow] = useState(false)
+    const [modalMessage, setModalMessage] = useState('')
 
     const loginChangeFunction = event => {
         setInputLogin(event.target.value)
-
-        if( verty(5, 16,event.target.value) ){
-            setInputLoginClass('form-control is-valid')
-        } else{
-            setInputLoginClass('form-control is-invalid')
-        }
     }
-
 
     const passwordChangeFunction = event =>{
         setInputPassword(event.target.value)
-
-        if( verty(5,16,event.target.value) ){
-            setInputPasswordClass('form-control is-invalid')
-        } else{
-            setInputPasswordClass('form-control is-valid')
-        }
 
         if(inputPasswordRepeat === event.target.value){
             setCheckPass(true)
@@ -68,7 +57,7 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
 
         const vertyCheck = verty(5, 16, inputLogin, inputPassword, inputPasswordRepeat)
 
-        if( verty(5,16,inputPassword) ){
+        if( !vertyCheck ){
             alert("Ошибка длины пароля")
             return false
         }
@@ -78,8 +67,9 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
                 login: inputLogin,
                 password: inputPassword
             }
-
-            addNewUser(newUserData)
+            
+            await addNewUser(newUserData)
+                .then(res => showModalWindow(res.message))
 
         } else{
             alert("Ошибка регистрации")
@@ -90,41 +80,26 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
         setInputPasswordRepeat('')
     }
 
+    const showModalWindow = (message) => {
+        setModalWindow(!modalWindow)
+        setModalMessage(message)
+    }
+
     return(
 <form>
     <h4>Регистация нового пользователя</h4>
-    <div className="form-group">
-        <label htmlFor="regInputLogin">Логин (5 - 16 символов) </label>
-        <input type="login" className={inputLoginClass} id="regInputLogin" placeholder="Login"
-        value={inputLogin}
-        onChange={(event) => loginChangeFunction(event)} />
-        <div className="valid-feedback">
-            Looks good!
-        </div>
-        <div className="invalid-feedback">
-            Please choose a username.
-        </div>
-    </div>
-    <div className="form-group">
-        <label htmlFor="regInputPass">Пароль (5 - 16 символов)</label>
-        <input type="password" className={inputPasswordClass} id="regInputPass" placeholder="Password"
-        value={inputPassword}
-        onChange={(event) => passwordChangeFunction(event) }
-        />
-        <div className="valid-feedback">
-            Looks good!
-        </div>
-        <div className="invalid-feedback">
-            Please choose a password.
-        </div>
-    </div>
-    <div className="form-group">
-        <label htmlFor="regInputPassAgain">Repeat password</label>
-        <input type="password" className="form-control" id="regInputPassAgain" placeholder="Repeat password"
-        value={inputPasswordRepeat}
-        onChange={event => passwordRepeatChangeFunction(event)}
-        />
-    </div>
+    <InputGroupItem inputtext={inputLogin} min={5} max={16} htmlfor="regInputLogin"
+        labeltext="Логин (5 - 16 символов)" inputtype="login" id={"regInputLogin"}
+        placeholder="Login" inputvalue={inputLogin} inputfunc={loginChangeFunction}
+    />
+    <InputGroupItem inputtext={inputPassword} min={5} max={16} htmlfor="regInputPass"
+        labeltext="Пароль (5 - 16 символов)" inputtype="password" id={"regInputPass"}
+        placeholder="Password" inputvalue={inputPassword} inputfunc={passwordChangeFunction}
+    />
+    <InputGroupItem inputtext={inputPasswordRepeat} min={5} max={16} htmlfor="regInputPassAgain"
+        labeltext="Repeat password" inputtype="password" id={"regInputPassAgain"}
+        placeholder="Password" inputvalue={inputPasswordRepeat} inputfunc={passwordRepeatChangeFunction}
+    />
     <button type="submit" className="btn btn-primary"
         onClick={(event) => addNewUserFunction(event)}
     >Registration</button>
@@ -132,7 +107,8 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
         ? <p></p>
         : <small>Пароли не совпадают</small>
     }
-    <p>{user.userCreatingInformation}</p>
+    {modalWindow && <ModalWindow message={modalMessage} 
+                        showModalWindow={showModalWindow}/>}
 </form>
     )
 }
