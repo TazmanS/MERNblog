@@ -10,11 +10,10 @@ router.post('/add', async (req, res) => {
     try{
         await User.findOne({login: req.body.login}).then((findEl) => {
             if(findEl){
-                res.status(200).json({
-                    data: "Login not free!!!"
-                })
+                res.status(204).json()
                 throw Error("Login not free!!!")
             }
+            
         })
 
         const user = new User({
@@ -54,7 +53,7 @@ router.post('/entrance', async (req, res) => {
             if(one[0]){
                 res.status(200).json(one)
             } else{
-                res.status(201).json("User not found")
+                res.status(204).json("User not found")
                 console.log("User not found")
             }
         }) 

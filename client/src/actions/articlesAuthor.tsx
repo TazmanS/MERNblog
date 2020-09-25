@@ -3,6 +3,7 @@ import {GET_ALL_AUTHOR_ARTICLES,
 import axios from 'axios'
 import moment from 'moment'
 import { getAllArticles } from './articles'
+import { showModalWindow } from './modalWindow'
 
 //отображение всех статьей в разделе автора + пагинация
 
@@ -58,6 +59,7 @@ export function addNewArticle(newArticleData){
 
             await axios.post('/api/article/add', data).then(() => {
                 dispatch( getAllArticles() )
+                dispatch( showModalWindow("You add new article!") )
                 console.log("Article add React")
             })
         } catch(e){
@@ -74,6 +76,7 @@ export function deleteArticle(articleId, authorId){
             }
             await axios.post('/api/article/delete', data)
             dispatch( getAllAuthorArticles(authorId) )
+            dispatch( showModalWindow("You delete article :(") )
         } catch(e){
             console.log(e)
         }

@@ -4,7 +4,6 @@ import {verty} from '../../../hooks/verty.hooks'
 import {addNewUser} from '../../../actions/user'
 import {withRouter} from 'react-router-dom'
 import InputGroupItem from './InputGroupItem'
-import ModalWindow from '../../../Components/ModalWindow'
 
 interface Reg {
     addNewUser(newUserData) :any,
@@ -25,8 +24,6 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
     const [inputPassword, setInputPassword] = useState('')
     const [inputPasswordRepeat, setInputPasswordRepeat] = useState('')
     const [checkPass, setCheckPass] = useState(true)
-    const [modalWindow, setModalWindow] = useState(false)
-    const [modalMessage, setModalMessage] = useState('')
 
     const loginChangeFunction = event => {
         setInputLogin(event.target.value)
@@ -69,7 +66,6 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
             }
             
             await addNewUser(newUserData)
-                .then(res => showModalWindow(res.message))
 
         } else{
             alert("Ошибка регистрации")
@@ -78,11 +74,6 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
         setInputLogin('')
         setInputPassword('')
         setInputPasswordRepeat('')
-    }
-
-    const showModalWindow = (message) => {
-        setModalWindow(!modalWindow)
-        setModalMessage(message)
     }
 
     return(
@@ -107,8 +98,6 @@ const Registration:React.FC<Reg> = ({ addNewUser, user, history }) =>{
         ? <p></p>
         : <small>Пароли не совпадают</small>
     }
-    {modalWindow && <ModalWindow message={modalMessage} 
-                        showModalWindow={showModalWindow}/>}
 </form>
     )
 }

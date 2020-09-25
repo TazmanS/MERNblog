@@ -7,6 +7,7 @@ import articleReducers from './articleReducers'
 import authorArticlesReducers from './authorArticlesReducers'
 import authorArticleReducers from './authorArticleReducers'
 import addOrUpdateArticle from './addOrUpdateArticle'
+import ModalWindow from './modalWindow'
 
 const reducer = combineReducers({
     user: usersReducers,
@@ -14,7 +15,8 @@ const reducer = combineReducers({
     article: articleReducers,
     authorArticles: authorArticlesReducers,
     authorArticle: authorArticleReducers,
-    addOrUpdate: addOrUpdateArticle
+    addOrUpdate: addOrUpdateArticle,
+    modalWindow: ModalWindow
 })
 
 export default reducer

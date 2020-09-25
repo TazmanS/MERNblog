@@ -4,12 +4,16 @@ import {ADD_NEW_USER_INFORMATION,
     USER_EXIT,
     USER_DELETE} from './actionTypes'
 import axios from 'axios'
+import { showModalWindow } from './modalWindow'
 
 
 export function addNewUser(newUserData) {
     return async dispatch => {
         try{
             axios.post('/api/user/add', newUserData).then( res => {
+                if(res.status === 204){
+                    throw Error
+                }
                 localStorage.setItem('user', res.data.id)
                 dispatch({
                     type: ADD_NEW_USER_INFORMATION,
@@ -17,8 +21,8 @@ export function addNewUser(newUserData) {
                     login: res.data.login,
                     id: res.data.id
                 })
-            })
-            return { message: "Add new add"}
+                dispatch( showModalWindow(`Welcome ${res.data.login}`) )
+            }).catch(() => dispatch( showModalWindow("User already existed") ) )
         } catch(e){
             console.error("Ошибка создания пользователя", e)
         }
@@ -57,11 +61,13 @@ export function userEntrance(userData){
                         login: res.data[0].login,
                         id: res.data[0]._id
                     })
-                } else{
+                    dispatch( showModalWindow(`Welcome ${res.data[0].login}`) )
+                } else if(res.status === 204){
                     dispatch({
                         type: USER_ENTRANCE_FALSE,
                         mess: res.data
                     })
+                    dispatch( showModalWindow("Wrong login or password") )
                 }
             })
         } catch(e){
@@ -95,6 +101,7 @@ export function userDelete(data){
                     dispatch({
                         type: USER_DELETE
                     })
+                    dispatch( showModalWindow("User delete") )
                 }
             })
 
