@@ -9,6 +9,7 @@ import UserDelete from './UserSettings/UserDelete'
 import UserChangePass from './UserSettings/UserChangePass'
 import Content from './Content/Content'
 import AddContent from './AddContent/AddContent'
+import ArticlesByTag from './ArticlesByTag/ArticleByTag'
 
 interface Section {
 
@@ -26,6 +27,7 @@ const Section:React.FC<Section> = () => {
                 <Route path="/settings" exact component={UserSettings} />
                 <Route path="/deleteuser" exact component={UserDelete} />
                 <Route path="/changepassword" exact component={UserChangePass} />
+                <Route path="/articlesbytag" exact component={ArticlesByTag} />
             </Switch>    
         </React.Fragment>
         

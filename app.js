@@ -10,6 +10,7 @@ app.use(express.json({ extended: true }))
 app.use('/api/article', require('./routes/article.routes'))
 app.use('/api/user', require('./routes/user.routes'))
 app.use('/api/author', require('./routes/author.routes'))
+app.use('/api/hashtag', require('./routes/hashtag.routes'))
 
 
 if (process.env.NODE_ENV === 'production') {

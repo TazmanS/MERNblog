@@ -30,7 +30,7 @@ router.post('/add', async (req, res) => {
 router.get('/all', async (req,res) => {
 
     try{
-        await Article.find({} ).then( articles =>{
+        await Article.find({}).then( articles =>{
             const data = {
                 articlesNumber: articles.length,
                 tenArticles: articles.reverse().slice(0,10)

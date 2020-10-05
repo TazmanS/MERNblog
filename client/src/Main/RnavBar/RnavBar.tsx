@@ -2,6 +2,7 @@ import React from 'react'
 import Login from './Login/Login'
 import {connect} from 'react-redux'
 import UserMenu from './UserMenu/UserMenu'
+import HashTag from './HashTag/HashTag'
 
 interface RnavBar {
     user: any
@@ -14,6 +15,7 @@ const RnavBar:React.FC<RnavBar> = ({ user }) =>{
                 ? <UserMenu />
                 : <Login />
             }
+            <HashTag />
         </div>
     )
 }
